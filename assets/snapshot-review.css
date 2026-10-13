@@ -50,7 +50,7 @@
 .runtime-snapshot > header { max-width: var(--snapshot-prose-width); margin: 0 auto; padding-bottom: 20px; border-bottom: 2px solid var(--snapshot-ink); }
 .runtime-snapshot .meta, .runtime-snapshot .source { font-size: max(17px, .95em); }
 .runtime-snapshot .meta { color: var(--snapshot-muted); }
-.runtime-snapshot .runtime-snapshot-toc { display: flex; flex-wrap: wrap; gap: 8px 28px; max-width: var(--snapshot-prose-width); margin: 0 auto 14px; padding: 14px 0; border-bottom: 1px solid var(--snapshot-line); }
+.runtime-snapshot .runtime-snapshot-toc { position: sticky; top: 84px; z-index: 10; display: flex; flex-wrap: wrap; gap: 8px 28px; max-width: var(--snapshot-prose-width); margin: 0 auto 14px; padding: 14px 0; background: var(--snapshot-surface); border-bottom: 1px solid var(--snapshot-line); }
 .runtime-snapshot .runtime-snapshot-toc a { max-width: 100%; }
 .runtime-snapshot section { min-width: 0; padding-top: 40px; margin-top: 14px; scroll-margin-top: 84px; }
 .runtime-snapshot section > ul { max-width: var(--snapshot-prose-width); margin-inline: auto; padding-left: 24px; }
