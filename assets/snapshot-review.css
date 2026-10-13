@@ -115,6 +115,7 @@
 .runtime-snapshot .taskinfo-member { border: 1px solid var(--snapshot-line); background: var(--snapshot-surface); padding: 12px; min-width: 0; }
 .runtime-snapshot .taskinfo-member > strong { display: block; }
 .runtime-snapshot .taskinfo-diagram .source { margin-top: 14px; }
+.runtime-snapshot .taskinfo-supplement > summary { font-size: 19px; }
 .runtime-snapshot .origin { display: block; margin-bottom: 5px; font-weight: 700; }
 .runtime-snapshot .origin.internal { color: var(--snapshot-green); }
 .runtime-snapshot .origin.external { color: var(--snapshot-brown); }
