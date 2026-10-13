@@ -53,6 +53,7 @@
 .runtime-snapshot .runtime-snapshot-toc { display: flex; flex-wrap: wrap; gap: 8px 28px; max-width: var(--snapshot-prose-width); margin: 0 auto 14px; padding: 14px 0; border-bottom: 1px solid var(--snapshot-line); }
 .runtime-snapshot .runtime-snapshot-toc a { max-width: 100%; }
 .runtime-snapshot section { min-width: 0; padding-top: 40px; margin-top: 14px; scroll-margin-top: 84px; }
+.runtime-snapshot section > ul { max-width: var(--snapshot-prose-width); margin-inline: auto; padding-left: 24px; }
 .runtime-snapshot .section-no { margin-right: 13px; color: var(--snapshot-blue); font-size: .8em; }
 .runtime-snapshot figure { min-width: 0; max-width: 1600px; margin: 24px auto 30px; overflow-x: auto; overscroll-behavior-x: contain; }
 .runtime-snapshot figure > svg.diagram { display: block; width: 100%; max-width: 100%; height: auto; }
@@ -101,6 +102,10 @@
 .runtime-snapshot .memory-group .group-count { margin-left: 20px; color: var(--snapshot-muted); font-size: .85em; font-weight: 400; }
 .runtime-snapshot .memory-group p { margin-block: 15px; }
 .runtime-snapshot .memory-group .table-wrap { margin-bottom: 5px; }
+.runtime-snapshot .module-backup-process { min-width: 0; max-width: var(--snapshot-prose-width); padding: 18px 22px; margin: 22px auto; border: 1px solid var(--snapshot-line); }
+.runtime-snapshot .module-backup-process p { margin: 0 0 10px; }
+.runtime-snapshot .module-backup-process ol { margin: 0; padding-left: 24px; }
+.runtime-snapshot .module-backup-process li { margin: 12px 0; }
 .runtime-snapshot .origin { display: block; margin-bottom: 5px; font-weight: 700; }
 .runtime-snapshot .origin.internal { color: var(--snapshot-green); }
 .runtime-snapshot .origin.external { color: var(--snapshot-brown); }

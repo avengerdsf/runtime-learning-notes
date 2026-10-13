@@ -11,6 +11,7 @@
 figure img,figure svg{display:block;width:100%;max-width:100%;height:auto}
 .restore-notes,.step-details{margin:10px 0;padding-left:24px;list-style:disc}.restore-notes>li,.step-details>li{margin:7px 0;padding:0;border:0;line-height:1.7}
 .steps .substeps{border:1px solid #9bb5c9;background:var(--blue-light);padding:14px 20px 14px 42px}
+.module-backup-process{border:1px solid var(--line);padding:18px 22px;margin:22px 0}.module-backup-process p{margin:0 0 10px}.module-backup-process ol{margin:0;padding-left:24px}.module-backup-process li{margin:12px 0}
 @media(max-width:760px){body{font-size:17px}main{padding:28px 20px;margin:0 auto}h1{font-size:31px}h2{font-size:25px}.toc{gap:8px 15px;padding:12px 20px}th,td{padding:10px}.steps>li{padding-left:47px}.steps h3{font-size:20px}.lead{font-size:19px}}
 .context-map .group-title{font-size:21px;font-weight:700}.context-map .field{font-size:18px}.context-map .port{fill:#fff;stroke:#7c8fa0;stroke-width:1.5}.context-map .pointer-label{font-size:18px;fill:var(--muted)}.context-caption{margin-top:13px;font-size:18px}
 @media(max-width:760px){.steps .substeps{padding:12px 12px 12px 34px}}
@@ -238,13 +239,17 @@ offset += size;</code></pre>
 <tr><td><code>kernelName</code> / <code>funcName</code></td><td>执行入口的函数名称字符串</td><td>在已加载的库中<strong>查找入口地址</strong>，再调用该函数</td></tr>
 </tbody></table></div>
 </div>
-<p>Module 加载区域采用下面的追加条件；地址与长度两项都不同时才入表：</p>
-<pre><code>prog-&gt;GetBinAlignBaseAddr(devId) != devAddr
-    &amp;&amp; prog-&gt;LoadSize() != memSize</code></pre>
-<p><strong>Host 落点：</strong>每个 <code>ModuleMemInfo</code> 根据 <code>memSize</code> 申请<strong>独立的 <code>hostAddr</code></strong>，同时记录 <code>devId</code>、<code>devAddr</code>、<code>drv</code> 和 <code>readonly</code>。收集完成后，由 <code>SaveModelAllDataToHost()</code> 遍历列表执行：</p>
-<pre><code>MemCopySync(node-&gt;hostAddr, node-&gt;memSize,
-            node-&gt;devAddr, node-&gt;memSize, RT_MEMCPY_DEVICE_TO_HOST);</code></pre>
-<p>binary 原先的 Host 加载数据、SO 名和函数名的 Host 字符串，用于提供加载信息与长度；这一份快照副本的内容来自对应的 <strong>Device 区域</strong>。</p>
+<div class="module-backup-process">
+<p><strong>Host 副本的生成：</strong></p>
+<ol>
+<li><strong>读取 Device 区域信息：</strong>从上表各区域取得 <code>devAddr</code> 和 <code>memSize</code>。原始 Host 加载资料及名称字符串提供加载信息与长度。</li>
+<li><strong>建立备份节点：</strong>创建 <code>ModuleMemInfo</code>，记录 Device 地址、长度及设备信息，同时申请<strong>独立的 Host 缓冲区 <code>hostAddr</code></strong>；将需要备份的节点加入 <code>moduleBackupList_</code>。</li>
+<li><strong>搬运 Device 当前内容：</strong>收集完成后，<code>SaveModelAllDataToHost()</code> 遍历列表，通过 <code>MemCopySync()</code> 执行 <strong><code>node-&gt;devAddr</code> → <code>node-&gt;hostAddr</code></strong> 的 D2H 拷贝。</li>
+</ol>
+</div>
+<details><summary>Module 二进制区域的入表条件</summary>
+<p>将 Module 的地址 <code>devAddr</code> 和长度 <code>memSize</code>，分别与同一 Device 上 Program 的二进制地址和长度比较。<strong>地址不同且长度不同</strong>时，才把该 Module 二进制节点加入备份列表。</p>
+</details>
 <p class="source"><a data-src="runtime" data-symbol="SaveModuleDataInfoToList">Program / Module 地址收集</a><a data-src="runtime" data-symbol="SaveModuleAicpuInfo">AICPU 名称区域</a><a data-src="runtime" data-symbol="SaveModelAllDataToHost">D2H 拷贝</a><a data-src="runtimehpp" data-symbol="ModuleMemInfo">Host 节点结构</a></p>
 </section>
 
