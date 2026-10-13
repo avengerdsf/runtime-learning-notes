@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Snapshot 复盘笔记</title>
+<style>
+:root{--ink:#253548;--muted:#607086;--line:#d5dee7;--blue:#245b85;--blue-light:#eef5fa;--green:#316a53;--green-light:#edf6f0;--paper:#fff;--bg:#f5f6f8}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:var(--toc-offset,110px)}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Times New Roman","SimSun",serif;font-size:18px;line-height:1.7}a{color:var(--blue);text-underline-offset:4px}code{font-family:"Times New Roman","SimSun",serif;font-size:1em;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--blue-light);padding:18px 22px;margin:20px 0;line-height:1.6;border-left:3px solid var(--blue)}p{margin:12px 0}h1,h2,h3{line-height:1.35;margin:0 0 20px}h1{font-size:38px}h2{font-size:29px}h3{font-size:23px;margin-top:28px}strong{font-weight:700}main{max-width:1160px;margin:38px auto 70px;padding:42px 54px 60px;background:var(--paper)}header{padding-bottom:28px;border-bottom:2px solid var(--ink)}.meta{color:var(--muted);font-size:17px}.lead{font-size:21px;max-width:960px}.toc{position:sticky;top:0;z-index:10;display:flex;gap:8px 28px;flex-wrap:wrap;max-width:1160px;margin:0 auto;padding:14px 54px;background:var(--paper);border-bottom:1px solid var(--line)}.toc a{white-space:nowrap;text-decoration:none;border-bottom:1px solid var(--line)}section{padding-top:40px;margin-top:14px}.section-no{font-size:23px;color:var(--blue);margin-right:13px}figure{margin:24px 0 30px}.diagram{width:100%;height:auto;display:block}.diagram text{font-family:"Times New Roman","SimSun",serif;fill:var(--ink);text-anchor:middle;font-size:19px}.diagram .heading{font-size:24px;font-weight:700}.diagram .fn{font-size:18px}.diagram .old{fill:var(--blue-light);stroke:#9bb5c9;stroke-width:1.3}.diagram .new{fill:var(--green-light);stroke:#a0c2ac;stroke-width:1.3}.diagram .arrow{fill:none;stroke:#7c8fa0;stroke-width:1.5}.diagram .phase{font-size:18px;fill:var(--muted);text-anchor:start}.diagram .divider{stroke:var(--line);stroke-dasharray:5 5}.table-wrap{overflow-x:auto;margin:20px 0}table{border-collapse:collapse;width:100%;font-size:17px;line-height:1.55}th{text-align:left;color:var(--blue);background:#f4f7fa;font-weight:700}th,td{padding:13px 15px;vertical-align:top;border-bottom:1px solid var(--line)}td:first-child{min-width:150px}td code{font-size:17px}.key{border-left:3px solid var(--blue);padding:4px 0 4px 18px;margin:20px 0}.chain{font-size:18px;padding:15px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);line-height:1.9}.chain .sep{color:var(--muted);padding:0 8px}.source{margin:18px 0;font-size:17px}.source a{margin-right:20px}.steps{list-style:none;padding:0;margin:20px 0;counter-reset:step}.steps>li{position:relative;padding:15px 0 20px 62px;border-bottom:1px solid var(--line);counter-increment:step}.steps>li:before{content:counter(step,decimal-leading-zero);position:absolute;left:0;top:12px;color:var(--blue);font-size:29px;line-height:1.4}.steps h3{font-size:21px;margin:0 0 7px}.steps p{margin:5px 0}.scope{color:var(--green);font-weight:700;margin-top:23px}.substeps{margin:15px 0;padding-left:28px}.substeps li{padding:5px 0}.substeps code{font-weight:700}details{margin:22px 0;border-top:1px solid var(--line);padding-top:14px}summary{font-weight:700;color:var(--blue);cursor:pointer;font-size:19px}.refs{padding-left:25px}.refs li{margin:9px 0}footer{margin-top:40px;padding-top:20px;border-top:2px solid var(--ink);font-size:17px;color:var(--muted)}.restore-table th:first-child{width:8%}.restore-table td:first-child{min-width:50px;font-size:21px;color:var(--blue)}.hint{color:var(--muted)}
+.origin{display:block;font-weight:700;margin-bottom:5px}.origin.internal{color:var(--green)}.origin.external{color:#8c541e}.origin.mixed{color:var(--blue)}tr.external-address td:first-child{border-left:3px solid #b88852;background:#fff8ef}td a{overflow-wrap:anywhere}.memory-group{margin:0;padding:18px 0;border-top:1px solid var(--line)}.memory-group summary{font-size:22px}.memory-group .group-count{font-size:18px;font-weight:400;color:var(--muted);margin-left:20px}.memory-group p{margin:15px 0}.memory-group .table-wrap{margin-bottom:5px}
+figure img,figure svg{display:block;width:100%;max-width:100%;height:auto}
+.restore-notes,.step-details{margin:10px 0;padding-left:24px;list-style:disc}.restore-notes>li,.step-details>li{margin:7px 0;padding:0;border:0;line-height:1.7}
+.steps .substeps{border:1px solid #9bb5c9;background:var(--blue-light);padding:14px 20px 14px 42px}
+@media(max-width:760px){body{font-size:17px}main{padding:28px 20px;margin:0 auto}h1{font-size:31px}h2{font-size:25px}.toc{gap:8px 15px;padding:12px 20px}th,td{padding:10px}.steps>li{padding-left:47px}.steps h3{font-size:20px}.lead{font-size:19px}}
+.context-map .group-title{font-size:21px;font-weight:700}.context-map .field{font-size:18px}.context-map .port{fill:#fff;stroke:#7c8fa0;stroke-width:1.5}.context-map .pointer-label{font-size:18px;fill:var(--muted)}.context-caption{margin-top:13px;font-size:18px}
+@media(max-width:760px){.steps .substeps{padding:12px 12px 12px 34px}}
+@media print{body{background:#fff}main{max-width:none;margin:0;padding:0}.toc{display:none}section{break-before:auto}figure,table tr,.steps>li{break-inside:avoid}a{color:inherit}details{display:block}details>*{display:block}footer{margin-top:25px}}
+</style>
+</head>
+<body>
+<nav class="toc" aria-label="笔记目录"><a href="#compare">01 新老流程</a><a href="#backup">02 Host 备份数据来源</a><a href="#restore">03 旧恢复流程</a></nav>
+<main>
+<header>
+<h1>Snapshot 复盘笔记</h1>
+<p class="meta">Runtime · upstream/master · c06e4cccb34a · 2026 年 10 月 11 日</p>
+</header>
+
+<section id="compare">
+<h2><span class="section-no">01</span>新老流程对比</h2>
+<p>upstream 已同时保留两条路径：<strong><code>args == nullptr</code> 进入旧流程</strong>；<strong><code>args != nullptr</code> 进入 Driver Device 内存快照流程</strong>。新流程先检查驱动能力，备份时记录 Runtime/Driver API 版本，恢复时校验版本。</p>
+<p class="key"><strong>变化集中在 Device 内存内容的保存与回填。</strong>旧流程由 <strong>Runtime 收集地址并搬运到 Host</strong>；新流程由 <strong>Driver 按内存快照标识处理</strong>。模型 SQ 备份、参数池传输映射恢复、模型和图恢复仍保留。</p>
+
+<h3>备份流程</h3>
+<figure class="diagram-wrap">
+<svg class="diagram" viewBox="0 0 1050 656" role="img" aria-labelledby="backup-title backup-desc">
+<title id="backup-title">Snapshot 新老备份流程对比</title><desc id="backup-desc">两列从上向下执行。旧流程同步、模型 SQ 备份、任务参数到 Host、Module 到 Host、Driver 资源备份；新流程同步并记录版本、模型 SQ 备份，再由 Driver 备份标记的 Device 内存及进程资源。</desc>
+<defs><marker id="backup-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#7c8fa0"/></marker></defs>
+<text class="heading" x="255" y="30">旧流程：Runtime 保存 Host 副本</text><text class="heading" x="795" y="30">新流程：Driver 内存快照</text>
+<line class="divider" x1="525" y1="52" x2="525" y2="640"/>
+<rect class="old" x="25" y="60" width="460" height="80"/><text x="255" y="91">同步活跃 Context</text><text class="fn" x="255" y="119">SnapShotPreProcessBackup</text>
+<rect class="old" x="25" y="166" width="460" height="80"/><text x="255" y="197">ModelBackup：模型 SQ 备份</text><text class="fn" x="255" y="225">SinkSqTasksBackup → Driver::SqBackup</text>
+<rect class="old" x="25" y="272" width="460" height="80"/><text x="255" y="303">ModelBackup：任务内存 Device → Host</text><text class="fn" x="255" y="331">SinkTaskMemoryBackup → OpMemoryBackup</text>
+<rect class="old" x="25" y="378" width="460" height="80"/><text x="255" y="409">Module 内存 Device → Host</text><text class="fn" x="255" y="437">SaveModule → SaveModelAllDataToHost</text>
+<rect class="old" x="25" y="484" width="460" height="80"/><text x="255" y="515">Driver 保存进程资源</text><text class="fn" x="255" y="543">ProcessResBackup(0)</text>
+<path class="arrow" marker-end="url(#backup-arrow)" d="M255 140 V166"/><path class="arrow" marker-end="url(#backup-arrow)" d="M255 246 V272"/><path class="arrow" marker-end="url(#backup-arrow)" d="M255 352 V378"/><path class="arrow" marker-end="url(#backup-arrow)" d="M255 458 V484"/>
+<rect class="new" x="565" y="60" width="460" height="80"/><text x="795" y="91">驱动能力检查与 Context 同步</text><text class="fn" x="795" y="119">CheckProcessDeviceMemSnapshotCompatible</text>
+<rect class="new" x="565" y="166" width="460" height="80"/><text x="795" y="197">记录 Runtime/Driver API 版本</text><text class="fn" x="795" y="225">SnapShotVersionInfoBackup</text>
+<rect class="new" x="565" y="272" width="460" height="80"/><text x="795" y="303">ModelBackup：模型 SQ 备份</text><text class="fn" x="795" y="331">SinkSqTasksBackup → Driver::SqBackup</text>
+<rect class="new" x="565" y="378" width="460" height="80"/><text x="795" y="409">Driver 保存进程资源与标记内存</text><text class="fn" x="795" y="437">ProcessResBackup(args→backupFlags)</text>
+<rect class="new" x="565" y="484" width="460" height="80"/><text x="795" y="515">快照保存 REQUIRED 内存</text><text x="795" y="543">backupFlags = 1 时包含 OPTIONAL</text>
+<path class="arrow" marker-end="url(#backup-arrow)" d="M795 140 V166"/><path class="arrow" marker-end="url(#backup-arrow)" d="M795 246 V272"/><path class="arrow" marker-end="url(#backup-arrow)" d="M795 352 V378"/><path class="arrow" marker-end="url(#backup-arrow)" d="M795 458 V484"/>
+<text class="phase" x="25" y="608">Host 副本：opBackUpAddrs_ + moduleBackupList_</text>
+<text class="phase" x="565" y="608">ModelBackup(allCompatible = true) 保留 SQ 备份</text>
+<text class="phase" x="565" y="635">随后返回；备份主流程跳过 SaveModule</text>
+</svg>
+</figure>
+
+<h3>恢复流程</h3>
+<figure class="diagram-wrap">
+<svg class="diagram" viewBox="0 0 1050 800" role="img" aria-labelledby="restore-title restore-desc">
+<title id="restore-title">Snapshot 新老恢复流程对比</title><desc id="restore-desc">旧流程依次恢复设备和页表、资源、Module、任务参数内容、参数池传输映射、模型和图、AICPU。新流程在版本校验和 Driver 内存恢复后仍恢复资源、参数池传输映射、模型和图，省去 Runtime Host 内存副本的回填。</desc>
+<defs><marker id="restore-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#7c8fa0"/></marker></defs>
+<text class="heading" x="255" y="30">旧流程：Host 副本回填 Device</text><text class="heading" x="795" y="30">新流程：Driver 恢复标记内存</text>
+<line class="divider" x1="525" y1="52" x2="525" y2="783"/>
+<rect class="old" x="25" y="60" width="460" height="76"/><text x="255" y="90">重开 Device，Driver 恢复进程资源</text><text class="fn" x="255" y="117">SnapShotDeviceRestore(0)</text>
+<rect class="old" x="25" y="162" width="460" height="76"/><text x="255" y="192">恢复 Stream、Event、Notify 等资源</text><text class="fn" x="255" y="219">SnapShotResourceRestore</text>
+<rect class="old" x="25" y="264" width="460" height="76"/><text x="255" y="294">Module 副本 Host → Device</text><text class="fn" x="255" y="321">RestoreModule</text>
+<rect class="old" x="25" y="366" width="460" height="76"/><text x="255" y="396">任务参数副本 Host → Device</text><text class="fn" x="255" y="423">OpMemoryRestore</text>
+<rect class="old" x="25" y="468" width="460" height="76"/><text x="255" y="498">重新建立参数池 DMA / UB 传输映射</text><text class="fn" x="255" y="525">ArgsPoolRestore → UbArgsPoolRestore</text>
+<rect class="old" x="25" y="570" width="460" height="76"/><text x="255" y="600">重建模型并恢复图</text><text class="fn" x="255" y="627">ModelRestore → SnapShotAclGraphRestore</text>
+<rect class="old" x="25" y="672" width="460" height="76"/><text x="255" y="702">回填 AICPU 名称缓存，恢复 SO 与 DFX</text><text class="fn" x="255" y="729">RestoreAiCpuKernelInfo → SO / DFX</text>
+<path class="arrow" marker-end="url(#restore-arrow)" d="M255 136 V162"/><path class="arrow" marker-end="url(#restore-arrow)" d="M255 238 V264"/><path class="arrow" marker-end="url(#restore-arrow)" d="M255 340 V366"/><path class="arrow" marker-end="url(#restore-arrow)" d="M255 442 V468"/><path class="arrow" marker-end="url(#restore-arrow)" d="M255 544 V570"/><path class="arrow" marker-end="url(#restore-arrow)" d="M255 646 V672"/>
+<rect class="new" x="565" y="60" width="460" height="76"/><text x="795" y="90">检查 Driver 能力与备份版本</text><text class="fn" x="795" y="117">CheckSnapShotVersionInfo</text>
+<rect class="new" x="565" y="162" width="460" height="76"/><text x="795" y="192">重开 Device，Driver 恢复资源和内存</text><text class="fn" x="795" y="219">SnapShotDeviceRestore(args→restoreFlags)</text>
+<rect class="new" x="565" y="264" width="460" height="76"/><text x="795" y="294">恢复 Stream、Event、Notify 等资源</text><text class="fn" x="795" y="321">SnapShotResourceRestore</text>
+<rect class="new" x="565" y="366" width="460" height="76"/><text x="795" y="396">重新建立参数池 DMA / UB 传输映射</text><text class="fn" x="795" y="423">ArgsPoolRestore → UbArgsPoolRestore</text>
+<rect class="new" x="565" y="468" width="460" height="76"/><text x="795" y="498">重建模型并恢复图</text><text class="fn" x="795" y="525">ModelRestore → SnapShotAclGraphRestore</text>
+<rect class="new" x="565" y="570" width="460" height="76"/><text x="795" y="600">恢复 AICPU 超时状态、SO 与 DFX</text><text class="fn" x="795" y="627">Timeout → BatchLoadCustomAicpuSo → DFX</text>
+<path class="arrow" marker-end="url(#restore-arrow)" d="M795 136 V162"/><path class="arrow" marker-end="url(#restore-arrow)" d="M795 238 V264"/><path class="arrow" marker-end="url(#restore-arrow)" d="M795 340 V366"/><path class="arrow" marker-end="url(#restore-arrow)" d="M795 442 V468"/><path class="arrow" marker-end="url(#restore-arrow)" d="M795 544 V570"/>
+<text class="phase" x="565" y="705">restoreFlags = 1 时包含 OPTIONAL</text><text class="phase" x="565" y="735">新流程省去 RestoreModule、OpMemoryRestore</text><text class="phase" x="565" y="765">以及 RestoreAiCpuKernelInfo 的 Runtime 回填</text>
+</svg>
+</figure>
+<p>内存分配侧通过 <code>MEM_SNAPSHOT_REQUIRED</code>、<code>MEM_SNAPSHOT_OPTIONAL</code> 标识分类。<code>backupFlags</code> 和 <code>restoreFlags</code> 传到 Driver；当前实现把值 <code>1</code> 转换为 <code>HAL_PROC_RES_*_INCLUDE_OPTIONAL</code>。<strong>备份与恢复的 OPTIONAL 范围需要对应。</strong></p>
+<p class="source" data-source="flow">源码：<a data-src="helper" data-symbol="SnapShotProcessBackup">备份与恢复主流程</a><a data-src="driver" data-symbol="ProcessResBackup">Driver flag 转换</a><a data-src="api" data-symbol="rtSnapShotProcessBackup">新老入口</a></p>
+</section>
+
+<section id="backup">
+<h2><span class="section-no">02</span>Device → Host 备份数据来源</h2>
+<p>这一节只追踪<strong>旧流程中 Runtime 实际执行 D2H 的数据</strong>。两份 Host 副本分别由 <code>DeviceSnapshot</code> 和 <code>Runtime</code> 持有，恢复时沿记录的 Device 地址回填。</p>
+
+<h3>2.1 ModelBackup：从模型任务中收集地址</h3>
+<p class="chain"><code>ModelBackup(devId, false)</code><span class="sep">→</span><code>SinkTaskMemoryBackup</code><span class="sep">→</span><code>OpMemoryBackup</code><br><code>Context 模型列表</code><span class="sep">→</span><code>Model::StreamList_()</code><span class="sep">→</span><code>TaskInfo</code><span class="sep">→</span><code>opVirtualAddrs_</code></p>
+<p><code>OpMemoryBackup()</code> 遍历该 Device 上活跃 Context 的模型和 stream，从任务字段提取 <strong>Device 地址、长度</strong>，逐项追加到 <code>opVirtualAddrs_</code>，并累加 <code>opTotalHostMemSize_</code>。</p>
+<p>v100 使用 stream 的延迟回收任务 ID 列表，通过 TaskFactory 查任务；v200_base 使用任务队列的 head/tail 遍历 TaskInfo。每个任务依次收集参数地址与 func-call 地址。</p>
+<details class="memory-group"><summary>① 算子参数与 Device 执行上下文<span class="group-count">5 项</span></summary>
+<p>TaskInfo 通过所属 Stream 关联到 Runtime Context。</p>
+<div class="table-wrap" id="taskinfo-context"><table><colgroup><col style="width:25%"><col style="width:40%"><col style="width:35%"></colgroup>
+<thead><tr><th>对象</th><th>记录的内容</th><th>与 OpMemory 备份的关系</th></tr></thead><tbody>
+<tr><td><code>TaskInfo</code></td><td>Runtime 管理单个任务的结构，记录任务类型、所属 Stream、任务 ID，以及参数块和执行描述区的地址等信息</td><td>备份时<strong>从 TaskInfo 中提取 Device 地址</strong></td></tr>
+<tr><td>Device 执行上下文描述区</td><td>按任务类型保存 kernel 入口地址、args 地址、启动规模及调度配置等；例如 <code>rtFftsPlusMixAicAivCtx_t</code></td><td><strong>D2H 复制描述区的字节内容</strong>，其地址由 <code>TaskInfo.u.aicTaskInfo.descAlignBuf</code> 等字段记录</td></tr>
+</tbody></table></div>
+<div class="table-wrap"><table><colgroup><col style="width:30%"><col style="width:34%"><col style="width:36%"></colgroup>
+<thead><tr><th>代码变量名称</th><th>主要作用</th><th>内存申请来源</th></tr></thead><tbody>
+<tr><td><code>aicTaskInfo.comm.args</code></td><td><strong>AICORE / AIVEC 的运行参数包。</strong>包含输入、输出的 Device 地址，tiling 地址或 tiling 数据；按算子格式还可包含 workspace 地址、标量等。具体布局由算子约定。普通 AIC/AIV 的执行配置直接写入 SQE；MIX 另有下行的 context 描述区。</td><td><span class="origin mixed">按参数加载路径</span>拷贝路径由 Runtime 参数池申请，见下方“参数池申请点”；no-copy 路径使用传入的 <code>argsInfo.args</code>。</td></tr>
+<tr><td><code>aicTaskInfo.descAlignBuf</code></td><td><strong>v100 的 AIC / AIV MIX 任务在 Device 上的执行上下文描述区。</strong>保存执行类型、kernel 入口地址、参数包地址、启动规模、AIC/AIV 配比，以及调度、QoS 和指令预取等配置，SQE 指向该描述区。</td><td><span class="origin internal">Runtime 内部申请</span>复用 MIX 参数池 entry，或由 <a data-src="davinci" data-line="112">AllocFftsMixDescMemForDavinciTask</a> 申请 <code>descBuf</code>，对齐后赋值。</td></tr>
+<tr><td><code>aicpuTaskInfo.comm.args</code></td><td><strong>AICPU 算子的运行参数包。</strong>保存该算子所需的输入、输出地址、标量及自定义参数，布局由 AICPU 算子的调用格式约定。执行控制信息写入 AICPU SQE。</td><td><span class="origin mixed">按参数加载路径</span>拷贝路径由 Runtime 参数池申请；no-copy 路径使用传入的 Device 参数地址。</td></tr>
+<tr><td><code>fftsPlusTask.descAlignBuf</code></td><td><strong>FFTS Plus 任务在 Device 上的执行上下文描述区。</strong>包含各子任务的执行描述，按 context 类型记录执行配置、参数地址、启动规模和前后继依赖等信息；参数地址指向的独立内存需另行判断备份来源。</td><td><span class="origin mixed">按 descAddrType</span>HOST：参数池或 <a data-src="ffts" data-line="284">FftsPlusTmpAllocH2D</a> 申请；DEVICE：复用传入的 <code>fftsPlusTaskInfo.descBuf</code>。</td></tr>
+<tr><td><code>fusionKernelTask.args</code></td><td><strong>融合任务的运行参数包。</strong>组织多个子算子执行所需的参数，供融合任务中的相应子算子读取。执行控制信息写入各子任务的 SQE。</td><td><span class="origin internal">Runtime 参数加载</span><a data-src="fusion">DavidStream::LoadArgsInfo</a> 提供 <code>result.kerArgs</code>，再由 <code>SetArgsFusionKernel</code> 写入任务。</td></tr>
+</tbody></table></div>
+<figure class="diagram-wrap" id="context-description">
+<svg class="diagram context-map" viewBox="0 0 1050 750" role="img" aria-labelledby="context-map-title context-map-desc">
+<title id="context-map-title">Context 描述区中的字段及地址关系</title>
+<desc id="context-map-desc">TaskInfo 的 descAlignBuf 指向 Device context 描述区。描述区包含执行类型、启动规模、任务依赖、调度和访存配置、kernel 入口地址与运行参数地址。入口地址指向算子代码，参数地址指向包含数据地址和其他参数的运行参数包。</desc>
+<defs><marker id="context-map-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#7c8fa0"/></marker></defs>
+<g data-box="task-pointer"><rect class="old" x="185" y="18" width="300" height="52"/><text x="335" y="50">TaskInfo 中的 descAlignBuf</text></g>
+<rect x="20" y="94" width="630" height="594" fill="#fbfcfe" stroke="#9bb5c9" stroke-width="1.4"/>
+<text class="heading" x="335" y="126">Device context 描述区</text>
+<g data-box="execution-type"><rect class="old" x="44" y="151" width="275" height="105"/><text class="group-title" x="181.5" y="178">执行类型与控制开关</text><text class="field" x="181.5" y="206">contextType（AIC / AIV / MIX）</text><text class="field" x="181.5" y="234">dumpSwitch 等</text></g>
+<g data-box="launch-size"><rect class="old" x="337" y="151" width="289" height="105"/><text class="group-title" x="481.5" y="178">启动规模与配比</text><text class="field" x="481.5" y="206">threadDim、*Blockdim</text><text class="field" x="481.5" y="234">*BlockRatioN（MIX）</text></g>
+<g data-box="dependencies"><rect class="old" x="44" y="274" width="275" height="126"/><text class="group-title" x="181.5" y="301">任务依赖</text><text class="field" x="181.5" y="329">predCntInit、predCnt</text><text class="field" x="181.5" y="356">successorNum、successorList</text><text class="field" x="181.5" y="383">srcSlot</text></g>
+<g data-box="scheduling"><rect class="old" x="337" y="274" width="289" height="126"/><text class="group-title" x="481.5" y="301">调度与访存配置</text><text class="field" x="481.5" y="329">schem、policyPri</text><text class="field" x="481.5" y="356">qos、partId、prefetchConfig</text><text class="field" x="481.5" y="383">指令缓存预取配置等</text></g>
+<g data-box="kernel-address"><rect class="old" x="44" y="426" width="582" height="113"/><text class="group-title" x="335" y="454">kernel 入口地址</text><text class="field" x="335" y="485">*TaskStartPcL / *TaskStartPcH</text><text x="335" y="516">起始执行地址的低位与高位</text></g>
+<g data-box="parameter-address"><rect class="old" x="44" y="559" width="582" height="113"/><text class="group-title" x="335" y="587">运行参数地址</text><text class="field" x="335" y="618">*TaskParamPtr* / Offset</text><text x="335" y="649">指向 kernel 读取的参数块</text></g>
+<g data-box="kernel-code"><rect class="new" x="760" y="426" width="270" height="113"/><text class="group-title" x="895" y="470">算子代码</text><text x="895" y="504">Device 上的 kernel</text></g>
+<g data-box="parameter-buffer"><rect class="new" x="760" y="559" width="270" height="164"/><text class="group-title" x="895" y="591">运行参数包</text><text x="895" y="627">输入 / 输出地址</text><text x="895" y="661">workspace / tiling 地址</text><text x="895" y="695">标量、tiling 数据等</text></g>
+<line class="arrow" x1="335" y1="70" x2="335" y2="94" marker-end="url(#context-map-arrow)"/>
+<line class="arrow" x1="626" y1="482.5" x2="760" y2="482.5" marker-end="url(#context-map-arrow)"/>
+<line class="arrow" x1="626" y1="615.5" x2="760" y2="615.5" marker-end="url(#context-map-arrow)"/>
+<circle class="port" cx="650" cy="482.5" r="3"/><circle class="port" cx="650" cy="615.5" r="3"/>
+<text class="pointer-label" x="695" y="467">指向</text><text class="pointer-label" x="695" y="600">指向</text>
+</svg>
+<figcaption class="context-caption">AIC/AIV 与 MIX 的字段按作用分组；FFTS Plus 的描述区可包含多份不同类型的 context。<a href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/pkg_inc/runtime/rt_external_ffts_define.h#L117" target="_blank" rel="noopener">字段定义</a></figcaption>
+</figure>
+<p class="key"><strong>tiling 地址指向 Device 中的 tiling 数据，后者保存计算规模、每核分工和核内分块等配置，kernel 通过该地址读取这些配置。</strong></p>
+<p><strong>context 里保存 args 地址及执行配置；args 的 D2H 保存该地址处的参数块内容。</strong>参数块内容可以包括输入、输出等地址值，标量，以及内联的 tiling 数据。</p>
+<figure class="diagram-wrap" id="context-args-backup">
+<svg class="diagram context-map" viewBox="0 0 1050 490" role="img" aria-labelledby="context-args-title context-args-desc">
+<title id="context-args-title">MIX 任务中 context 与 args 的 Device 到 Host 备份</title>
+<desc id="context-args-desc">Device 的 context 区保存执行配置和 args 的地址，args 地址指向另一个参数区域。context 的 D2H 复制 context 内容，args 的 D2H 复制参数块内容，形成两份 Host 副本。</desc>
+<defs><marker id="context-args-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#7c8fa0"/></marker></defs>
+<text class="heading" x="525" y="30">MIX 任务的 Device → Host 备份</text>
+<text class="group-title" x="245" y="73">Device</text><text class="group-title" x="855" y="73">Host</text>
+<g data-box="device-context"><rect class="old" x="20" y="95" width="450" height="126"/><text class="group-title" x="245" y="126">context 区（descAlignBuf）</text><text x="245" y="160">执行配置 + args 的 Device 地址</text><text class="field" x="245" y="192">参数地址字段记录 args 的位置</text></g>
+<g data-box="host-context"><rect class="new" x="680" y="95" width="350" height="126"/><text class="group-title" x="855" y="126">context 的 Host 副本</text><text x="855" y="160">执行配置 + 原 args 地址值</text><text class="field" x="855" y="192">复制 context 区的内容</text></g>
+<g data-box="device-args"><rect class="old" x="20" y="335" width="450" height="126"/><text class="group-title" x="245" y="366">args 参数块（comm.args）</text><text x="245" y="400">输入 / 输出地址值、标量、tiling 数据等</text><text class="field" x="245" y="432">保存 kernel 的运行参数</text></g>
+<g data-box="host-args"><rect class="new" x="680" y="335" width="350" height="126"/><text class="group-title" x="855" y="366">args 的 Host 副本</text><text x="855" y="400">参数块中的字节内容</text><text class="field" x="855" y="432">地址值、标量、tiling 数据等</text></g>
+<line class="arrow" x1="470" y1="158" x2="680" y2="158" marker-end="url(#context-args-arrow)"/><text class="pointer-label" x="575" y="142">D2H</text>
+<line class="arrow" x1="470" y1="398" x2="680" y2="398" marker-end="url(#context-args-arrow)"/><text class="pointer-label" x="575" y="382">D2H</text>
+<line class="arrow" x1="245" y1="221" x2="245" y2="335" marker-end="url(#context-args-arrow)"/><text class="pointer-label" x="365" y="282">args 地址指向</text>
+</svg>
+</figure>
+</details>
+<details class="memory-group"><summary>② 流控制<span class="group-count">5 项</span></summary><p><strong>一个流可以包含多个任务，流控制任务本身也是其中的一项任务。</strong>执行到这项任务时，根据其控制动作，改变流的激活状态或后续执行位置。各个任务仍属于各自的流。</p>
+<p id="stream-sq-terms"><strong>Stream：Runtime 管理的任务流。</strong><strong>SQ（Submission Queue）：任务提交队列。</strong>SQ 存放提交给设备调度器的 SQE（Submission Queue Entry，任务提交描述条目）；Stream 记录关联的 SQ ID。</p>
+<div class="table-wrap"><table><colgroup><col style="width:30%"><col style="width:34%"><col style="width:36%"></colgroup>
+<thead><tr><th>代码变量名称</th><th>主要作用</th><th>内存申请来源</th></tr></thead><tbody>
+<tr><td><code>streamswitchTask.funcCallSvmMem</code></td><td><strong>条件切换流</strong>的 Device 控制指令</td><td><span class="origin internal">Runtime 内部申请</span><a data-src="condtask" data-line="154">AllocFuncCallMemForStreamSwitchTask</a> → <code>DevMemAllocWithBackupFlag</code>。</td></tr>
+<tr><td><code>stmLabelSwitchIdxTask.funcCallSvmMem</code></td><td><strong>按索引跳转到标签位置</strong>的 Device 控制指令</td><td><span class="origin internal">Runtime 内部申请</span><a data-src="condtask" data-line="395">AllocFuncCallMemForStmLblSwiByIdxTask</a> → <code>DevMemAllocWithBackupFlag</code>。</td></tr>
+<tr class="external-address"><td><code>stmLabelSwitchIdxTask.indexPtr</code></td><td>用于选取目标标签的索引值</td><td><span class="origin external">调用方传入</span><code>rtLabelSwitchByIndex</code> 的 <code>ptr</code> → <code>idPtr</code> → <a data-src="condtask" data-line="513">indexPtr</a>。任务初始化保存已有地址。</td></tr>
+<tr class="external-address"><td><code>stmLabelSwitchIdxTask.labelInfoPtr</code></td><td>标签信息表：记录目标 SQ（任务提交队列）及队列中的执行位置</td><td><span class="origin external">调用方传入</span><code>rtLabelSwitchByIndex</code> 的 <code>labelInfoPtr</code> → <code>labelPtr</code> → <a data-src="condtask" data-line="513">labelInfoPtr</a>。<code>rtLabelListCpy</code> 也接收调用方提供的 <code>dst</code>。</td></tr>
+<tr><td><code>streamactiveTask.funcCallSvmMem</code></td><td><strong>激活目标流</strong>的 Device 控制指令</td><td><span class="origin internal">Runtime 内部申请</span><a data-src="activetask" data-line="80">AllocFuncCallMemForStreamActiveTask</a> → <code>DevMemAllocWithBackupFlag</code>。</td></tr>
+</tbody></table></div><figure><img src="snapshot_stream_control.png" alt="一个流包含多个任务；流切换任务控制条件分支，标签切换任务控制执行位置，流激活任务激活目标流" style="display:block;width:100%;height:auto"></figure>
+<div id="label-inputs">
+<p><strong>标签标记任务提交队列中预先设置的执行位置。</strong>标签表的目标信息在标签设置流程中建立。</p>
+<div class="table-wrap"><table><colgroup><col style="width:20%"><col style="width:35%"><col style="width:45%"></colgroup>
+<thead><tr><th>参数</th><th>指向的数据</th><th>作用</th></tr></thead><tbody>
+<tr><td><code>indexPtr</code></td><td>Device 中的<strong>索引值 <code>k</code></strong></td><td>选择表中的第 <code>k</code> 项</td></tr>
+<tr><td><code>labelInfoPtr</code></td><td>Device 中的<strong>标签信息表（跳转目标表）</strong></td><td>每项记录一个跳转目标：<strong>目标 SQ，以及队列中的执行位置</strong></td></tr>
+</tbody></table></div>
+<p><strong>执行顺序：</strong>读取索引 <code>k</code> → 读取表中第 <code>k</code> 项 → 跳转到该项记录的目标 SQ 和队列位置。</p>
+</div>
+</details>
+<details class="memory-group"><summary>③ 等待与同步<span class="group-count">3 项</span></summary><div class="table-wrap"><table><colgroup><col style="width:30%"><col style="width:34%"><col style="width:36%"></colgroup>
+<thead><tr><th>代码变量名称</th><th>主要作用</th><th>内存申请来源</th></tr></thead><tbody>
+<tr><td><code>memWaitValueTask.funcCallSvmMem2</code></td><td><strong>Device 执行的等待指令程序。</strong>读取当前状态、按目标值和规则比较，执行重复检查；条件满足后推进当前流后续任务的执行。D2H 保存这段程序的指令字节。</td><td><span class="origin internal">Runtime 内部申请</span><a data-src="memtask" data-line="333">AllocFuncCallMemForMemWaitTask</a>：普通任务直接申请；CaptureWait 从 <code>Model::MemWaitDevAlloc</code> 分配的页中取一段。</td></tr>
+<tr><td><code>memWaitValueTask.devAddr</code></td><td><strong>被等待状态值的 Device 地址。</strong>该地址处保存当前数值，可由写值任务或其他计算任务更新；等待任务读取它判断条件。D2H 保存该内存区的当前内容。</td><td><span class="origin mixed">按任务场景</span>普通 MemWait：接口传入的 <a data-src="memtask" data-line="403">devAddr</a>。Event/CaptureWait：也可复用 Runtime event 地址，见 <a data-src="eventc" data-line="228">EvtWaitSoftwareMode</a>。</td></tr>
+<tr><td><code>rdmaPiValueModifyInfo.funCallMemAddr</code></td><td><strong>RDMA PI 修改指令程序及目标地址列表。</strong>程序按列表逐个读取 Device 上的 RDMA 描述数据，更新其中的 PI 字段并写回。</td><td><span class="origin internal">Runtime 内部申请</span><a data-src="rdma" data-line="25">RdmaPiValueModifyTaskInit</a> → <code>DevMemAllocWithBackupFlag</code>，随后对齐并记录地址。</td></tr>
+</tbody></table></div>
+<div id="wait-value-purpose">
+<p><strong>等待条件中的字段：</strong></p>
+<div class="table-wrap"><table><colgroup><col style="width:20%"><col style="width:35%"><col style="width:45%"></colgroup>
+<thead><tr><th>字段</th><th>具体含义</th><th>执行时的用途</th></tr></thead><tbody>
+<tr><td><code>devAddr</code></td><td>当前状态值所在的 Device 地址</td><td>从该地址读取当前值。数值随其他任务的写入而变化，例如完成标记从 <code>0</code> 变为 <code>1</code></td></tr>
+<tr><td><code>value</code></td><td>比较用的目标值，记录在 <code>TaskInfo.u.memWaitValueTask.value</code> 中</td><td>作为等待条件的比较依据；例如目标值为 <code>1</code></td></tr>
+<tr><td><code>flag</code></td><td>比较规则，记录在 <code>TaskInfo.u.memWaitValueTask.flag</code> 中</td><td><code>0</code> 表示当前值大于等于目标值，<code>1</code> 表示相等；还支持按位 AND、NOR 条件</td></tr>
+</tbody></table></div>
+<p><strong>软件 Event 等待示例：</strong>前述等待程序（<code>funcCallSvmMem2</code>）检查 <code>devAddr</code> 指向的 Event 状态值。此时 <code>devAddr = eventAddr</code>、<code>value = 1</code>、<code>flag = 0</code>，等待条件为 <code>*eventAddr &gt;= 1</code>。当前状态值为 <code>0</code> 时继续等待；另一条流执行 Record 任务向同一地址写入 <code>1</code> 后，条件满足，等待流继续执行后续任务。<strong>前两项备份分别保存等待程序的指令字节和状态内存的当前内容。</strong></p>
+<p><strong>目标值与比较规则：</strong><code>value</code> 和 <code>flag</code> 参与生成等待程序，目标常量和比较操作体现在指令中。</p>
+</div>
+</details>
+<details class="memory-group"><summary>④ 模型任务更新<span class="group-count">3 项</span></summary><div class="table-wrap"><table><colgroup><col style="width:30%"><col style="width:34%"><col style="width:36%"></colgroup>
+<thead><tr><th>代码变量名称</th><th>主要作用</th><th>内存申请来源</th></tr></thead><tbody>
+<tr><td><code>mdlUpdateTask.tilingTabAddr</code></td><td>模型任务更新时查询 kernel 的 tiling 表</td><td><span class="origin internal">Runtime 内部申请</span><a data-src="program" data-line="1910">Program::CopyTilingTabToDev</a> → <code>DevMemAllocWithBackupFlag</code>；返回的 <code>devCopyMem</code> 写入 <code>tilingTabAddr</code>。</td></tr>
+<tr class="external-address"><td>v100：<code>mdlUpdateTask.tilingKeyAddr</code><br>v200_base：<code>mdlUpdateTask.tilingKeyOffset</code></td><td>选择 kernel 时使用的 tiling key 值</td><td><span class="origin external">调用方传入</span><a data-src="mdltask" data-line="136">ModelTaskUpdateInit</a> 保存 <code>para-&gt;tilingKeyAddr</code>；David 路径将该地址存入 <code>tilingKeyOffset</code>。</td></tr>
+<tr class="external-address"><td>v100：<code>mdlUpdateTask.blockDimAddr</code><br>v200_base：<code>mdlUpdateTask.blockDimOffset</code></td><td>算子启动时的 block 数</td><td><span class="origin external">调用方传入</span><a data-src="mdltask" data-line="136">ModelTaskUpdateInit</a> 保存 <code>para-&gt;blockDimAddr</code>；David 路径将该地址存入 <code>blockDimOffset</code>。</td></tr>
+</tbody></table></div>
+<div id="model-update-purpose">
+<p><strong>更新作用：</strong><code>MODEL_TASK_UPDATE</code> 更新模型中指定任务的执行配置。目标流 ID 和目标任务 ID 用于定位要更新的任务。</p>
+<div class="table-wrap"><table><colgroup><col style="width:25%"><col style="width:40%"><col style="width:35%"></colgroup>
+<thead><tr><th>字段</th><th>指向的内存内容</th><th>作用</th></tr></thead><tbody>
+<tr><td><code>tilingTabAddr</code></td><td>查询表：记录 tiling key 对应的 kernel 入口地址、MIX 类型等执行信息</td><td>根据 key 查找对应的 kernel 信息</td></tr>
+<tr><td><code>tilingKeyAddr</code><br><code>tilingKeyOffset</code></td><td>一个 tiling key 数值</td><td>指定从查询表中选择哪种 kernel 实现</td></tr>
+<tr><td><code>blockDimAddr</code><br><code>blockDimOffset</code></td><td>一个 blockDim 数值</td><td>提供新的启动 block 数量，更新目标任务的启动规模</td></tr>
+</tbody></table></div>
+</div>
+</details>
+<details><summary>参数池申请点</summary>
+<p>内部参数通常从 <code>H2DCopyMgr</code> 的 BufferAllocator 取 entry。池初始化或扩容时申请整块 Device 内存；random-size 路径直接按大小申请。任务的参数指针可以指向整块内存中的一个 entry 或偏移位置。</p>
+<ul class="refs"><li>普通池：<a data-src="pool" data-line="339">H2DCopyMgr::MallocBuffer</a>。</li><li>PCIe BAR 池：<a data-src="pool" data-line="410">H2DCopyMgr::MallocPcieBarBuffer</a>。</li><li>UB 池：<a data-src="pool" data-line="485">H2DCopyMgr::MallocUbBuffer</a>。</li><li>random-size：<a data-src="pool" data-line="154">H2DCopyMgr::AllocDevMem(size)</a>。</li></ul>
+<p>这些申请路径最终调用 <code>Driver::DevMemAllocWithBackupFlag()</code>。</p>
+</details>
+<p><strong>Host 落点：</strong>申请总长度为 <code>opTotalHostMemSize_</code> 的<strong>连续数组</strong>，保存到 <code>opBackUpAddrs_</code>；按地址列表顺序，以 <code>offset</code> 逐块拼接：</p>
+<pre><code>MemCopySync(hostAddr + offset, size, addr, size, RT_MEMCPY_DEVICE_TO_HOST);
+offset += size;</code></pre>
+<p>参数地址在 KernelLaunch 构造任务时进入 <code>comm.args</code> 等字段。参数块内部保存的张量地址不会触发递归遍历。<code>opVirtualAddrs_</code> 使用 vector 逐项追加，同一地址可以出现多次。</p>
+<p>ModelBackup 前半段还调用 <code>SinkSqTasksBackup()</code>：收集模型 stream 的 SQ ID，交给 <code>NpuDriver::SqBackup()</code>。SQ 的存储由 Driver 负责，这部分与上面的 Runtime D2H 参数副本分别保存。</p>
+<p class="source"><a data-src="helper" data-symbol="ModelBackup">ModelBackup</a><a data-src="snapshot" data-symbol="OpMemoryBackup">Host 副本生成</a><a data-src="v100" data-symbol="RecordArgsAddrAndSize">v100 地址收集</a><a data-src="v200" data-symbol="RecordArgsAddrAndSize">v200_base 地址收集</a></p>
+
+<h3>2.2 ModuleBackup：从 Program 和 Module 中收集地址</h3>
+<p>代码入口为 <code>Runtime::SaveModule()</code>。它遍历 Program allocator 中仍有效的 Program，将 Device 内存信息组织成 <code>ModuleMemInfo</code>，放入 <code>moduleBackupList_</code>。</p>
+<p class="chain"><code>SaveModule</code><span class="sep">→</span><code>SaveModuleDataInfoToList(prog)</code><span class="sep">→</span><code>moduleBackupList_</code><br><code>SaveModelAllDataToHost</code><span class="sep">→</span><code>node.devAddr → node.hostAddr</code></p>
+<div class="table-wrap"><table>
+<colgroup><col style="width:33%"><col style="width:30%"><col style="width:37%"></colgroup>
+<thead><tr><th>代码变量名称</th><th>主要作用</th><th>Device 地址获取位置</th></tr></thead>
+<tbody>
+<tr><td><code>Program::baseAddrAlign_[devId]</code></td><td>设备上已加载的<strong>算子二进制</strong></td><td><code>prog-&gt;GetBinAlignBaseAddr(devId)</code></td></tr>
+<tr><td><code>Program::soNameDevAddrMap_[devId]</code></td><td>设备上的 <strong>SO 名称字符串</strong></td><td><code>prog-&gt;GetSoNameDevAddrMap(devId)</code></td></tr>
+<tr><td><code>Program::funcNameDevAddrMap_[devId]</code></td><td>设备上的<strong>函数名称字符串</strong></td><td><code>prog-&gt;GetFuncNameDevAddrMap(devId)</code></td></tr>
+<tr><td><code>Module::baseAddrAlign_</code></td><td>当前 Context 的 Module 已加载的<strong>算子二进制</strong></td><td><code>prog-&gt;GetCtxMap()</code> → Context → <code>GetModuleWithoutCreate(prog)</code> → <code>module-&gt;GetBaseAddr()</code></td></tr>
+<tr><td><code>Module::soNamesBaseAddr_</code></td><td>Module 使用的 AICPU <strong>SO 名称字符串</strong></td><td><code>module-&gt;GetAicpuLoadInfo()</code> 输出的 <code>soNameBase</code></td></tr>
+<tr><td><code>Module::kernelNamesBaseAddr_</code></td><td>Module 使用的 AICPU <strong>入口名称字符串</strong></td><td><code>GetAicpuLoadInfo()</code> 输出的 <code>kernelNameBase</code></td></tr>
+</tbody></table></div>
+<div id="module-name-purpose">
+<p><strong>AICPU 库名称与入口名称：</strong>SO 是编译后的<strong>共享库文件</strong>，库中保存机器代码；kernel 对应被调用的<strong>执行入口</strong>。</p>
+<div class="table-wrap"><table><colgroup><col style="width:25%"><col style="width:35%"><col style="width:40%"></colgroup>
+<thead><tr><th>名称</th><th>对应内容</th><th>作用</th></tr></thead><tbody>
+<tr><td><code>soName</code></td><td>共享库名称字符串</td><td><strong>定位并加载</strong>所需的 SO 库</td></tr>
+<tr><td><code>kernelName</code> / <code>funcName</code></td><td>执行入口的函数名称字符串</td><td>在已加载的库中<strong>查找入口地址</strong>，再调用该函数</td></tr>
+</tbody></table></div>
+</div>
+<p>Module 加载区域采用下面的追加条件；地址与长度两项都不同时才入表：</p>
+<pre><code>prog-&gt;GetBinAlignBaseAddr(devId) != devAddr
+    &amp;&amp; prog-&gt;LoadSize() != memSize</code></pre>
+<p><strong>Host 落点：</strong>每个 <code>ModuleMemInfo</code> 根据 <code>memSize</code> 申请<strong>独立的 <code>hostAddr</code></strong>，同时记录 <code>devId</code>、<code>devAddr</code>、<code>drv</code> 和 <code>readonly</code>。收集完成后，由 <code>SaveModelAllDataToHost()</code> 遍历列表执行：</p>
+<pre><code>MemCopySync(node-&gt;hostAddr, node-&gt;memSize,
+            node-&gt;devAddr, node-&gt;memSize, RT_MEMCPY_DEVICE_TO_HOST);</code></pre>
+<p>binary 原先的 Host 加载数据、SO 名和函数名的 Host 字符串，用于提供加载信息与长度；这一份快照副本的内容来自对应的 <strong>Device 区域</strong>。</p>
+<p class="source"><a data-src="runtime" data-symbol="SaveModuleDataInfoToList">Program / Module 地址收集</a><a data-src="runtime" data-symbol="SaveModuleAicpuInfo">AICPU 名称区域</a><a data-src="runtime" data-symbol="SaveModelAllDataToHost">D2H 拷贝</a><a data-src="runtimehpp" data-symbol="ModuleMemInfo">Host 节点结构</a></p>
+</section>
+
+<section id="restore">
+<h2><span class="section-no">03</span>旧恢复流程及恢复内容</h2>
+<ul class="restore-notes">
+<li><strong>入口与前置状态：</strong>旧入口向 <code>SnapShotProcessRestore()</code> 传入 <code>nullptr</code>，外层要求状态为 <code>BACKED_UP</code>。</li>
+<li><strong>回调顺序：</strong>先执行 <code>RESTORE_PRE</code>，完成下列恢复后，再执行 <code>RESTORE_POST</code>。</li>
+<li><strong>结束状态：</strong>状态回到 <code>LOCKED</code>，随后由调用方执行 Unlock。</li>
+</ul>
+<p class="key"><strong>顺序依赖：</strong><strong>设备和页表恢复</strong>后才能使用原 Device 地址；<strong>Stream 恢复</strong>后才能下发配置和内存拷贝任务；<strong>Module 与参数内容回填</strong>后，继续恢复参数池传输映射、模型 SQ 和图。</p>
+<p class="scope">全局阶段：先完成所有 Device 的设备恢复与资源恢复，再恢复 Module。</p>
+<ol class="steps">
+<li><h3>SnapShotDeviceRestore：重开设备并恢复页表</h3><ul class="step-details">
+<li><strong>重新打开设备：</strong>逐个调用 <code>Device::ReOpen()</code>，关闭主机侧设备连接，重新拉起 AICPU executor（设备侧算子执行进程），打开设备并更新 SSID。</li>
+<li><strong>恢复地址访问基础：</strong>调用 <code>ProcessResRestore(0)</code>，由 Driver（驱动）恢复进程资源和页表信息，使原设备地址重新可用。</li>
+</ul></li>
+<li><h3>SnapShotResourceRestore：恢复运行资源与配置</h3><ul class="step-details">
+<li><strong>恢复任务流：</strong>Context 先执行 <code>StreamsTaskClean()</code>，再执行 <code>StreamsRestore()</code>，恢复默认流、创建的流及适用的控制流。</li>
+<li><strong>重新申请同步标识：</strong>逐设备重新申请 Event（事件）、Notify（通知）、CountNotify（计数通知）的 ID。</li>
+<li><strong>恢复运行配置：</strong><code>ResourceRestore()</code> 恢复错误记录的环形缓冲区，按平台准备 Dcache（数据缓存）栈，重新发送 AICPU topic 版本、超时配置并启动 Dcache lock 操作。</li>
+<li><strong>重置事件扩展池：</strong>执行 <code>EventExpandingPoolRestore()</code>，重置池中的缓冲区。</li>
+</ul></li>
+<li><h3>RestoreModule：回填 Program / Module 内存</h3><ul class="step-details">
+<li><strong>读取与写回：</strong>遍历 <code>moduleBackupList_</code>，把每个 <code>hostAddr</code> 的 <code>memSize</code> 字节写回记录的 <code>devAddr</code>。</li>
+<li><strong>恢复内容：</strong>算子二进制加载区域、SO（Shared Object，共享库）名称、函数名称，以及 Module 的 AICPU 名称区域。</li>
+<li><strong>拷贝路径与属性：</strong>kernel 内存池中的地址走 <code>BinaryPoolMemCopySync()</code>，其余走 <code>BinaryMemCopySync()</code>；携带节点的 <code>readonly</code> 属性。</li>
+</ul></li>
+</ol>
+<p class="scope">逐 Device 阶段：对一个 Device 按下面顺序全部完成，再处理下一个 Device。</p>
+<ol class="steps" style="counter-reset:step 3">
+<li><h3>OpMemoryRestore：回填模型任务引用的内存</h3><ul class="step-details">
+<li><strong>读取与写回：</strong>按 <code>opVirtualAddrs_</code> 的顺序和长度，从 <code>opBackUpAddrs_ + offset</code> 取主机侧备份，写回记录的设备地址。</li>
+<li><strong>恢复内容：</strong>第 2.1 节的参数块、MIX/FFTS 执行上下文描述、func-call 指令程序及 tiling 相关数据。</li>
+<li><strong>下发并等待完成：</strong>通过当前 Context 的控制 SQ stream 执行 <code>MemcopyAsync(..., HOST_TO_DEVICE)</code>，最后调用 <code>Synchronize()</code> 等待回填完成。</li>
+</ul></li>
+<li><h3>ArgsPoolRestore：恢复主机与设备参数缓冲区的搬运地址关系</h3><ul class="step-details">
+<li><strong>处理范围：</strong><code>UmaArgLoader</code> 的普通、super、max、random 参数池。</li>
+<li><strong>DMA 全称与作用：</strong>Direct Memory Access，直接内存访问，由<strong>专用硬件</strong>负责把主机侧参数数据搬到设备侧。</li>
+<li><strong>更新搬运地址信息：</strong>PCIe DMA 策略下，针对<strong>已有的主机侧和设备侧缓冲区</strong>调用 <code>MemConvertAddr()</code>，重新获取搬运所需的源地址、目标地址及相关信息，更新到 <code>cpyAddr.dmaAddr</code>，供后续参数搬运使用。</li>
+<li><strong>UB 策略分支：</strong>使用 UB 策略的这些参数池也会重新获取主机侧和设备侧的内存段描述；UB 的含义及描述内容见下一步。</li>
+</ul></li>
+<li><h3>UbArgsPoolRestore：恢复 UB 参数池的内存段访问资料</h3><ul class="step-details">
+<li><strong>UB 全称与含义：</strong>本节 UB 指 Unified Bus，统一总线。它是一套<strong>硬件互联方案</strong>，提供主机与设备之间的<strong>连接通路和通信规则</strong>：发送方按规定格式发出数据，接收方按同一规则识别并送到目标位置。</li>
+<li><strong>参数数据的路径：</strong>主机参数缓冲区（一块存放参数的内存） → UB 互联通路 → 设备参数缓冲区。</li>
+<li><strong>与 DMA 的区别：</strong>UB 提供部件之间的数据通信通路与规则；DMA 是由<strong>专用硬件</strong>执行内存搬运的机制。</li>
+<li><strong>处理范围：</strong>启用 UB 连接时，处理 <code>UbArgLoader</code> 的普通和 super 参数池。</li>
+<li><strong>内存段描述：</strong>segment（内存段）是一段内存范围；这里的描述保存 UB 传输访问这段内存所需的信息。</li>
+<li><strong>更新两侧访问资料：</strong>对已有缓冲区调用 <code>GetMemTsegInfo()</code>，按主机地址、设备地址和长度重新获取两侧描述，刷新 <code>hostTsegInfo</code> 与 <code>devTsegInfo</code>，使后续 UB 参数传输使用当前有效的访问资料。</li>
+</ul></li>
+<li><h3>ModelRestore：重建模型与 SQ 任务</h3><ul class="step-details">
+<li><strong>处理范围：</strong>遍历该设备的活跃 Context 及 TS executor 模型；Software SQ capture 模型和 auto-split SQ 模型在这条遍历中跳过。</li>
+<li><strong>执行模型重建：</strong>对每个符合条件的模型调用 <code>Model::ReBuild()</code>，依次执行：</li>
+</ul>
+<ol class="substeps">
+<li><code>ReSetup()</code>：重新申请 model ID；写入 Device 的 model ID、<code>endGraph</code>、<code>activeEntryStream</code>；重新申请模型 stream ID。</li>
+<li><code>ResetForRestore()</code>：释放并清空旧的 streamInfo、aicpuTaskInfo、queueInfo 以及模型 func-call 相关内存和状态，为重新完成模型加载做准备。</li>
+<li><code>ReBindStreams()</code>：将非 AICPU stream 重新绑定到模型，保留 head stream 标识。</li>
+<li><code>SinkSqTasksRestore()</code>：收集模型 stream 的 SQ ID，调用 Driver <code>SqRestore()</code> 恢复已备份的下沉队列任务。</li>
+<li><code>CheckRestoredSqStatus()</code>：检查 SQ 未启用且 head 为 0，tail 的最终状态在后续加载完成流程校验。</li>
+<li><code>ModelLoadCompleteByStream()</code> / <code>LoadCompleteByStream()</code>：按设备特性重新完成模型加载，建立执行所需信息。</li>
+<li><code>UpdateSnapShotSqe()</code>：逐 stream 修正恢复后的任务信息。Device SQ 路径更新 StreamActive 的 func-call、适用的 2D memcpy DMA 信息，以及 StreamSwitch、ModelTaskUpdate 的 SQE；Software SQ 路径更新 Host SQE。</li>
+</ol></li>
+<li><h3>SnapShotAclGraphRestore：恢复 Software SQ capture 图资源</h3><ul class="step-details">
+<li><strong>通信资源：</strong>按需重置 UB Jetty。</li>
+<li><strong>图模型资源：</strong>对已 capture ready 且启用 Software SQ 的 CaptureModel，重新申请 model ID 并调用 <code>RestoreForSoftwareSq()</code>。</li>
+<li><strong>队列资源池：</strong>最后恢复设备的 <code>SqCqPool</code>。</li>
+</ul></li>
+<li><h3>RestoreAiCpuKernelInfo：回填 ArgLoader 名称缓存</h3><ul class="step-details">
+<li><strong>处理范围：</strong>遍历 <code>UmaArgLoader::soNameMap_</code> 和 <code>kernelNameMap_</code>。</li>
+<li><strong>数据来源与写回：</strong>把主机侧名称缓存保存的字符串写回对应的设备地址。</li>
+</ul></li>
+<li><h3>AICPU timeout 清理：重置超时监控状态</h3><ul class="step-details">
+<li><strong>清除超时状态：</strong>执行 <code>ClearAicpuTimeoutState()</code>。</li>
+<li><strong>关闭旧监控：</strong>非 PC 构建还调用 <code>TryCloseAicpuMonitor()</code>，为后续运行重新建立监控状态做准备。</li>
+</ul></li>
+<li><h3>BatchLoadCustomAicpuSo：重新加载自定义 SO</h3><ul class="step-details">
+<li><strong>适用设备：</strong>备份时记录存在自定义 AICPU 进程的设备才进入该步骤。</li>
+<li><strong>加载数据来源：</strong>筛选已加载的 CPU Program，从主机侧 <code>Program::Data()</code>、<code>LoadSize()</code> 和 <code>GetSoName()</code> 构造临时设备缓冲区。</li>
+<li><strong>加载与回收：</strong>执行 <code>batchLoadsoFrombuf</code>，同步后释放临时内存。</li>
+</ul></li>
+<li><h3>SetAicpuDfxForRestore：重新建立 printf DFX</h3><ul class="step-details">
+<li><strong>适用条件：</strong>设备支持 AICPU DFX（维测功能），且 printf 已就绪。</li>
+<li><strong>恢复打印支持：</strong>执行 <code>ReInitAicpuPrintfMem()</code>、<code>SetupAicpuPrintfDfx()</code>，恢复 printf 所需的内存、地址配置及处理线程。</li>
+</ul></li>
+</ol>
+
+<p class="source"><a data-src="helper" data-symbol="SnapShotProcessRestore">完整恢复顺序</a><a data-src="impl" data-symbol="ApiImplSnapshot::SnapShotProcessRestore">外层状态与回调</a><a data-src="model" data-symbol="Model::ReBuild">Model ReBuild</a><a data-src="pool" data-symbol="ArgsPoolConvertAddr">参数池传输映射恢复</a><a data-src="loader" data-symbol="RestoreAiCpuKernelInfo">AICPU 名称回填</a></p>
+
+<details><summary>源码索引</summary>
+<p>以下链接固定到 <code>upstream/master</code> 的提交 <code>c06e4cccb34ae5c5b616544250718879927da0d7</code>，便于对照复盘时的实现。</p>
+<ul class="refs">
+<li><a data-src="helper">snapshot_process_helper.cc：流程分支、ModelBackup、ModelRestore、AICPU 恢复</a></li>
+<li><a data-src="snapshot">device_snapshot.cc：D2H/H2D 副本与参数池恢复</a></li>
+<li><a data-src="v100">v100/device_snapshot_adapter.cc：任务地址收集</a></li>
+<li><a data-src="v200">v200_base/device_snapshot_adapter.cc：任务地址收集</a></li>
+<li><a data-src="runtime">runtime.cc：SaveModule、RestoreModule</a></li>
+<li><a data-src="model">model_rebuild.cc：模型重建与 SQ 备份恢复</a></li>
+<li><a data-src="context">context.cc：Stream 清理与恢复</a></li>
+<li><a data-src="device">raw_device.cc：设备重开与配置恢复</a></li>
+<li><a data-src="pool">h2d_copy_mgr.cc：DMA / UB 映射更新</a></li>
+<li><a data-src="loader">uma_arg_loader.cc：AICPU 名称缓存回填</a></li>
+<li><a data-src="stream">stream.cc：SQE 修正</a></li>
+</ul>
+</details>
+</section>
+</main>
+<script>
+const toc=document.querySelector('.toc');
+new ResizeObserver(()=>document.documentElement.style.setProperty('--toc-offset',`${toc.getBoundingClientRect().height+16}px`)).observe(toc);
+const commit='c06e4cccb34ae5c5b616544250718879927da0d7';
+const files={helper:'src/runtime/feature/snapshot/snapshot_process_helper.cc',snapshot:'src/runtime/feature/snapshot/device_snapshot.cc',v100:'src/runtime/feature/snapshot/v100/device_snapshot_adapter.cc',v200:'src/runtime/feature/snapshot/v200_base/device_snapshot_adapter.cc',runtime:'src/runtime/core/src/runtime.cc',runtimehpp:'src/runtime/core/inc/runtime.hpp',driver:'src/runtime/driver/npu_driver.cc',api:'src/runtime/api/api_c_snapshot.cc',impl:'src/runtime/api/impl/api_impl_snapshot.cc',model:'src/runtime/feature/model/model_rebuild.cc',pool:'src/runtime/core/src/pool/h2d_copy_mgr.cc',loader:'src/runtime/core/src/kernel/arg_loader/uma_arg_loader.cc',context:'src/runtime/core/src/context/context.cc',device:'src/runtime/core/src/device/raw_device.cc',stream:'src/runtime/core/src/stream/stream.cc'};
+Object.assign(files,{davinci:'src/runtime/core/src/task/task_info/davinci/davinci_kernel_task_v100.cc',ffts:'src/runtime/feature/ffts/ffts_task.cc',fusion:'src/runtime/feature/fusion/fusion_c.cc',fusiontask:'src/runtime/feature/fusion/fusion_task.cc',condtask:'src/runtime/core/src/task/task_info/cond_op/cond_op_stream_task.cc',memtask:'src/runtime/core/src/task/task_info/memory/memory_task.cc',eventc:'src/runtime/core/src/event/event_c.cc',rdma:'src/runtime/feature/ffts/rdma_task.cc',activetask:'src/runtime/core/src/task/task_info/stream/stream_task_active.cc',program:'src/runtime/core/src/kernel/program.cc',mdltask:'src/runtime/core/src/task/task_info/model/model_update_task.cc'});
+document.querySelectorAll('a[data-src]').forEach(a=>{a.href='https://gitcode.com/cann/runtime/blob/'+commit+'/'+files[a.dataset.src]+(a.dataset.line?'#L'+a.dataset.line:'');a.target='_blank';a.rel='noopener';});
+</script>
+</body>
+</html>
