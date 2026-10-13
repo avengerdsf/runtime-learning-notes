@@ -111,9 +111,9 @@
 .runtime-snapshot .taskinfo-part { border: 1px solid var(--snapshot-line); background: var(--snapshot-blue-light); padding: 14px 18px; margin-top: 14px; }
 .runtime-snapshot .taskinfo-part > strong { display: block; margin-bottom: 8px; }
 .runtime-snapshot .taskinfo-diagram p { margin: 6px 0; }
-.runtime-snapshot .taskinfo-members { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.runtime-snapshot .taskinfo-member { border: 1px solid var(--snapshot-line); background: var(--snapshot-surface); padding: 12px; min-width: 0; }
-.runtime-snapshot .taskinfo-member > strong { display: block; }
+.runtime-snapshot .taskinfo-field-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.runtime-snapshot .taskinfo-field-group { border: 1px solid var(--snapshot-line); background: var(--snapshot-surface); padding: 12px; min-width: 0; }
+.runtime-snapshot .taskinfo-field-group > strong { display: block; }
 .runtime-snapshot .taskinfo-diagram .source { margin-top: 14px; }
 .runtime-snapshot .taskinfo-supplement > summary { font-size: 19px; }
 .runtime-snapshot .origin { display: block; margin-bottom: 5px; font-weight: 700; }
@@ -131,7 +131,7 @@
 @container kb-reading (max-width: 760px) {
   .runtime-snapshot .taskinfo-diagram { padding: 14px; }
   .runtime-snapshot .taskinfo-part { padding: 12px; }
-  .runtime-snapshot .taskinfo-members { grid-template-columns: 1fr; }
+  .runtime-snapshot .taskinfo-field-groups { grid-template-columns: 1fr; }
   .runtime-snapshot { font-size: 17px; }
   .runtime-snapshot h2 { font-size: 25px; }
   .runtime-snapshot .runtime-snapshot-toc { gap: 8px 15px; }

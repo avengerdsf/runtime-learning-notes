@@ -6,15 +6,25 @@ tags:
 ---
 
 <div class="runtime-snapshot">
-<link rel="stylesheet" href="/knowledge/runtime/assets/snapshot-review.css?v=546690492b59">
+<link rel="stylesheet" href="/knowledge/runtime/assets/snapshot-review.css?v=a8fdfcc64d8c">
 <nav class="runtime-snapshot-toc" aria-label="笔记目录"><a href="#compare" data-no-popover="true" data-router-ignore>01 新老流程</a><a href="#backup" data-no-popover="true" data-router-ignore>02 Host 备份数据来源</a><a href="#restore" data-no-popover="true" data-router-ignore>03 旧恢复流程</a></nav>
 <header>
-<p class="meta">Runtime · upstream/master · c06e4cccb34a · 2026 年 10 月 11 日</p>
+<p class="meta">Runtime · upstream/master · 2026 年 10 月 13 日</p>
 </header>
 <section id="compare">
 <h2><span class="section-no">01</span>新老流程对比</h2>
-<p>upstream 已同时保留两条路径：<strong><code>args == nullptr</code> 进入旧流程</strong>；<strong><code>args != nullptr</code> 进入 Driver Device 内存快照流程</strong>。新流程先检查驱动能力，备份时记录 Runtime/Driver API 版本，恢复时校验版本。</p>
+<p>在 <code>upstream/master</code> 提交 <code>8ed7a689026b87b90d992c8ece0a1d282b2aec62</code> 中，备份和恢复均保留两条路径：<strong><code>args == nullptr</code> 进入旧流程</strong>；<strong><code>args != nullptr</code> 进入 Driver Device 内存快照流程</strong>。新流程在备份和恢复时均检查驱动能力，备份时记录 API 版本，恢复时校验版本。</p>
 <p class="key"><strong>变化集中在 Device 内存内容的保存与回填。</strong>旧流程由 <strong>Runtime 收集地址并搬运到 Host</strong>；新流程由 <strong>Driver 按内存快照标识处理</strong>。模型 SQ 备份、参数池传输映射恢复、模型和图恢复仍保留。</p>
+<h3>入口分流与版本条件</h3>
+<div class="table-wrap"><table><colgroup><col style="width:16%"><col style="width:34%"><col style="width:50%"></colgroup>
+<thead><tr><th>项目</th><th>旧流程</th><th>新流程</th></tr></thead><tbody>
+<tr><td>入口</td><td><code>args == nullptr</code><br>无参 API 或 <code>WithArgs(nullptr)</code></td><td><code>args != nullptr</code><br><code>WithArgs(args)</code></td></tr>
+<tr><td>flags</td><td>传给 Driver 的值为 <code>0</code></td><td><code>0</code> 仍走新流程；<code>1</code> 包含 OPTIONAL 内存</td></tr>
+<tr><td>前置检查</td><td>芯片快照能力、进程状态</td><td>同左；Driver Device 内存快照能力不支持时，返回 <code>RT_ERROR_FEATURE_NOT_SUPPORT</code>，终止备份或恢复</td></tr>
+<tr><td>备份版本</td><td>不记录</td><td>Context 同步后、模型 SQ 备份前记录：<br><code>runtimeApiVersion</code> ← 编译期 <code>__HAL_API_VERSION</code><br><code>driverApiVersion</code> ← 运行时 <code>halGetAPIVersion()</code></td></tr>
+<tr><td>恢复版本</td><td>不校验</td><td>设备恢复前，要求记录有效且两项版本分别相等；否则返回 <code>RT_ERROR_SNAPSHOT_RESTORE_FAILED</code></td></tr>
+</tbody></table></div>
+<p class="source">本节源码（<code>8ed7a689026b</code>）：<a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/acl/aclrt_impl/snapshot.cpp#L58" target="_blank" rel="noopener">ACL 参数分流</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/api/api_c_snapshot.cc#L78" target="_blank" rel="noopener">Runtime 入口</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/feature/snapshot/snapshot_process_helper.cc#L564" target="_blank" rel="noopener">备份、恢复主流程</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/feature/snapshot/snapshot_process_helper.cc#L33" target="_blank" rel="noopener">版本记录与校验</a></p>
 <h3>备份流程</h3>
 <figure class="diagram-wrap">
 <svg class="diagram" viewBox="0 0 1050 656" role="img" aria-labelledby="backup-title backup-desc">
@@ -32,7 +42,7 @@ tags:
 <rect class="new" x="565" y="166" width="460" height="80"/><text x="795" y="197">记录 Runtime/Driver API 版本</text><text class="fn" x="795" y="225">SnapShotVersionInfoBackup</text>
 <rect class="new" x="565" y="272" width="460" height="80"/><text x="795" y="303">ModelBackup：模型 SQ 备份</text><text class="fn" x="795" y="331">SinkSqTasksBackup → Driver::SqBackup</text>
 <rect class="new" x="565" y="378" width="460" height="80"/><text x="795" y="409">Driver 保存进程资源与标记内存</text><text class="fn" x="795" y="437">ProcessResBackup(args→backupFlags)</text>
-<rect class="new" x="565" y="484" width="460" height="80"/><text x="795" y="515">快照保存 REQUIRED 内存</text><text x="795" y="543">backupFlags = 1 时包含 OPTIONAL</text>
+<rect class="new" x="565" y="484" width="460" height="80"/><text x="795" y="515">0：强制备份内存（REQUIRED）</text><text x="795" y="543">1：强制 + 可选备份内存</text>
 <path class="arrow" marker-end="url(#backup-arrow)" d="M795 140 V166"/><path class="arrow" marker-end="url(#backup-arrow)" d="M795 246 V272"/><path class="arrow" marker-end="url(#backup-arrow)" d="M795 352 V378"/><path class="arrow" marker-end="url(#backup-arrow)" d="M795 458 V484"/>
 <text class="phase" x="25" y="608">Host 副本：opBackUpAddrs_ + moduleBackupList_</text>
 <text class="phase" x="565" y="608">ModelBackup(allCompatible = true) 保留 SQ 备份</text>
@@ -61,45 +71,37 @@ tags:
 <rect class="new" x="565" y="468" width="460" height="76"/><text x="795" y="498">重建模型并恢复图</text><text class="fn" x="795" y="525">ModelRestore → SnapShotAclGraphRestore</text>
 <rect class="new" x="565" y="570" width="460" height="76"/><text x="795" y="600">恢复 AICPU 超时状态、SO 与 DFX</text><text class="fn" x="795" y="627">Timeout → BatchLoadCustomAicpuSo → DFX</text>
 <path class="arrow" marker-end="url(#restore-arrow)" d="M795 136 V162"/><path class="arrow" marker-end="url(#restore-arrow)" d="M795 238 V264"/><path class="arrow" marker-end="url(#restore-arrow)" d="M795 340 V366"/><path class="arrow" marker-end="url(#restore-arrow)" d="M795 442 V468"/><path class="arrow" marker-end="url(#restore-arrow)" d="M795 544 V570"/>
-<text class="phase" x="565" y="705">restoreFlags = 1 时包含 OPTIONAL</text><text class="phase" x="565" y="735">新流程省去 RestoreModule、OpMemoryRestore</text><text class="phase" x="565" y="765">以及 RestoreAiCpuKernelInfo 的 Runtime 回填</text>
 </svg>
 </figure>
-<p>内存分配侧通过 <code>MEM_SNAPSHOT_REQUIRED</code>、<code>MEM_SNAPSHOT_OPTIONAL</code> 标识分类。<code>backupFlags</code> 和 <code>restoreFlags</code> 传到 Driver；当前实现把值 <code>1</code> 转换为 <code>HAL_PROC_RES_*_INCLUDE_OPTIONAL</code>。<strong>备份与恢复的 OPTIONAL 范围需要对应。</strong></p>
-<p class="source" data-source="flow">源码：<a data-src="helper" data-symbol="SnapShotProcessBackup" href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/src/runtime/feature/snapshot/snapshot_process_helper.cc" target="_blank" rel="noopener noreferrer">备份与恢复主流程</a><a data-src="driver" data-symbol="ProcessResBackup" href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/src/runtime/driver/npu_driver.cc" target="_blank" rel="noopener noreferrer">Driver flag 转换</a><a data-src="api" data-symbol="rtSnapShotProcessBackup" href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/src/runtime/api/api_c_snapshot.cc" target="_blank" rel="noopener noreferrer">新老入口</a></p>
+<h3>新流程：flags 与内存范围</h3>
+<div class="table-wrap"><table><colgroup><col style="width:18%"><col style="width:44%"><col style="width:19%"><col style="width:19%"></colgroup>
+<thead><tr><th>内存类别</th><th>Device 内存范围</th><th>备份 / 恢复<br>flags = 0</th><th>备份 / 恢复<br>flags = 1</th></tr></thead><tbody>
+<tr><td>REQUIRED<br>强制备份内存</td><td>任务参数池、执行描述区、控制任务内存及标签表；<br>Module 程序内存、AICPU SO / kernel 名称内存；<br>SIMD、SIMT、AICPU printf 缓冲；<br>通过 <code>ADVISE_SNAPSHOT_REQUIRED</code> 补标记的传入 Device 地址</td><td>Driver 备份 / 恢复</td><td>Driver 备份 / 恢复</td></tr>
+<tr><td>OPTIONAL<br>可选备份内存</td><td>Runtime 其余按 OPTIONAL 标记的内部 Device 内存</td><td>不包含</td><td>额外由 Driver 备份 / 恢复</td></tr>
+<tr><td>NO_BACKUP<br>无需备份内存</td><td>自定义 AICPU SO 重载的临时设备缓冲</td><td>不包含</td><td>不包含</td></tr>
+</tbody></table></div>
+<p>REQUIRED 可在分配时打标，也可通过 <code>MemAdvise</code> 为已有 Device 地址补标。printf 缓冲属于 REQUIRED；下发 printf 配置的 <code>devDfxMem</code>、<code>devDfxArgs</code> 属于 OPTIONAL。</p>
+<p class="source" data-source="flow">源码：<a data-src="helper" data-symbol="SnapShotProcessBackup" href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/src/runtime/feature/snapshot/snapshot_process_helper.cc" target="_blank" rel="noopener noreferrer">主流程</a><a data-src="driver" data-symbol="ProcessResBackup" href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/src/runtime/driver/npu_driver.cc" target="_blank" rel="noopener noreferrer">Driver flags</a><a data-src="api" data-symbol="rtSnapShotProcessBackup" href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/src/runtime/api/api_c_snapshot.cc" target="_blank" rel="noopener noreferrer">入口</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/inc/drv/driver.hpp#L345" target="_blank" rel="noopener">默认 REQUIRED 分配</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/feature/model/model.cc#L1642" target="_blank" rel="noopener">模型 OPTIONAL 分配</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/device/raw_device.cc#L2323" target="_blank" rel="noopener">SIMD / SIMT printf</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/dfx/aicpu_dfx.cc#L119" target="_blank" rel="noopener">AICPU printf</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/dfx/aicpu_dfx.cc#L41" target="_blank" rel="noopener">printf 配置参数</a></p>
+<h3 id="snapshot-advise">已有 Device 地址：advise 标记与调用点</h3>
+<p><code>ADVISE_SNAPSHOT_REQUIRED = 4</code> 为已有 Device 地址补 REQUIRED 标记。调用链：<code>Driver::MemAdvise(ptr, size, ADVISE_SNAPSHOT_REQUIRED, devId)</code> → <code>NpuDriver::MemAdvise</code> → <code>halMemAdvise</code>。</p>
+<div class="table-wrap"><table><colgroup><col style="width:40%"><col style="width:40%"><col style="width:20%"></colgroup>
+<thead><tr><th>调用函数</th><th>补标记对象</th><th>传入长度</th></tr></thead><tbody>
+<tr><td><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/launch/aicpu_stars.cc#L170" target="_blank" rel="noopener"><code>StreamLaunchKernelEx</code></a><br><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/launch/aicpu_starsv2.cc#L72" target="_blank" rel="noopener">Stars v2 / AICPU Stream 分支</a></td><td><code>aicpuTaskInfo.comm.args</code></td><td><code>comm.argsSize</code></td></tr>
+<tr><td><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/feature/ffts/ffts_task.cc#L438" target="_blank" rel="noopener"><code>FftsPlusTaskInit</code></a></td><td>Device 描述区 <code>fftsPlusTaskInfo-&gt;descBuf</code></td><td><code>descBufLen</code></td></tr>
+<tr><td><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/task/task_info/cond_op/cond_op_stream_task.cc#L525" target="_blank" rel="noopener"><code>StreamLabelSwitchByIndexTaskInit</code></a></td><td>调用方传入的 <code>idPtr</code>（<code>indexPtr</code>）</td><td><code>sizeof(uint64_t)</code></td></tr>
+<tr><td><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/task/task_info/memory/memory_task.cc#L421" target="_blank" rel="noopener"><code>MemWaitValueTaskInit</code></a></td><td>等待值地址 <code>devAddr</code>（CaptureWait 复用）</td><td><code>sizeof(uint64_t)</code></td></tr>
+<tr><td><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/task/task_info/model/model_update_task.cc#L138" target="_blank" rel="noopener"><code>ModelTaskUpdateInit</code></a></td><td><code>tilingKeyAddr</code>、<code>blockDimAddr</code>，分别补标记</td><td>各 <code>sizeof(uint64_t)</code></td></tr>
+</tbody></table></div>
+<p>补标记发生在任务初始化 / 下发阶段。各调用点先检查 <code>IsProcessDeviceMemSnapshotAdviseSupported()</code>，并检查地址非空；参数包和描述区还要求长度非零。能力不支持时跳过补标记；执行 <code>MemAdvise</code> 失败时返回错误。</p>
+<p class="source">源码：<a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/pkg_inc/driver/ascend_hal_define.h#L826" target="_blank" rel="noopener">advise 标记定义</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/driver/npu_driver_mem.cc#L810" target="_blank" rel="noopener">MemAdvise → halMemAdvise</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/device/raw_device.cc#L599" target="_blank" rel="noopener">补标记能力检查</a></p>
 </section>
 <section id="backup">
 <h2><span class="section-no">02</span>Device → Host 备份数据来源</h2>
 <p>这一节只追踪<strong>旧流程中 Runtime 实际执行 D2H 的数据</strong>。两份 Host 副本分别由 <code>DeviceSnapshot</code> 和 <code>Runtime</code> 持有，恢复时沿记录的 Device 地址回填。</p>
 <h3>2.1 ModelBackup：从模型任务中收集地址</h3>
 <p class="chain"><code>ModelBackup(devId, false)</code><span class="sep">→</span><code>SinkTaskMemoryBackup</code><span class="sep">→</span><code>OpMemoryBackup</code><br><code>Context 模型列表</code><span class="sep">→</span><code>Model::StreamList_()</code><span class="sep">→</span><code>TaskInfo</code><span class="sep">→</span><code>opVirtualAddrs_</code></p>
-<p><code>OpMemoryBackup()</code> 遍历该 Device 上活跃 Context 的模型和 stream，从任务字段提取 <strong>Device 地址、长度</strong>，逐项追加到 <code>opVirtualAddrs_</code>，并累加 <code>opTotalHostMemSize_</code>。</p>
-<p>v100 使用 stream 的延迟回收任务 ID 列表，通过 TaskFactory 查任务；v200_base 使用任务队列的 head/tail 遍历 TaskInfo。每个任务依次收集参数地址与 func-call 地址。</p>
-<figure class="taskinfo-diagram" id="taskinfo-overview" aria-labelledby="taskinfo-title">
-<p class="structure-title" id="taskinfo-title">TaskInfo（Host 侧）</p>
-<div class="taskinfo-part"><strong>公共管理字段</strong>
-<p><code>stream</code> · <code>type</code> / <code>typeName</code> · <code>id</code> / <code>taskSn</code></p>
-<p><code>pos</code> · <code>stmArgPos</code> · <code>sqeNum</code></p>
-<p><code>bindFlag</code> · <code>updateFlag</code> · <code>needPostProc</code> · <code>error</code> / <code>drvErr</code> / <code>errorCode</code></p>
-<p><code>enableProfiling</code> · <code>taskTrackTimeStamp</code></p>
-</div>
-<div class="taskinfo-part"><strong><code>u</code>：任务专用联合体，按 <code>type</code> 选择成员</strong>
-<div class="taskinfo-members">
-<div class="taskinfo-member"><strong><code>aicTaskInfo</code></strong><p><code>comm.args</code> · <code>descAlignBuf</code></p><p><code>kernel</code> · <code>tilingKey</code> · <code>funcAddr</code></p></div>
-<div class="taskinfo-member"><strong><code>aicpuTaskInfo</code></strong><p><code>comm.args</code></p><p><code>soName</code> · <code>funcName</code></p></div>
-<div class="taskinfo-member"><strong><code>memWaitValueTask</code></strong><p><code>devAddr</code> · <code>value</code> · <code>flag</code></p><p><code>funcCallSvmMem2</code></p></div>
-</div>
-<p>其他成员：<code>fftsPlusTask</code>、<code>memcpyAsyncTaskInfo</code>、<code>eventWaitTaskInfo</code> 等</p>
-</div>
-<div class="taskinfo-part"><strong><code>pkgStat</code>：完成报告统计</strong><p><code>expectPackage</code> · <code>receivePackage</code> · <code>packageReportNum</code></p></div>
-<figcaption class="source"><a data-src="taskinfo" href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/src/runtime/core/inc/task/task_info.hpp" target="_blank" rel="noopener noreferrer">TaskInfo 定义</a></figcaption>
-</figure>
+<p><code>OpMemoryBackup()</code> 从模型任务的 <code>TaskInfo</code> 中收集 <strong>Device 地址和长度</strong>，登记到 <code>opVirtualAddrs_</code>。</p>
 <details class="memory-group"><summary>① 算子参数与 Device 执行描述区<span class="group-count">5 项</span></summary>
-<p>TaskInfo 通过所属 Stream 关联到 Runtime Context。</p>
-<div class="table-wrap" id="taskinfo-context"><table><colgroup><col style="width:25%"><col style="width:40%"><col style="width:35%"></colgroup>
-<thead><tr><th>对象</th><th>记录的内容</th><th>与 OpMemory 备份的关系</th></tr></thead><tbody>
-<tr><td><code>TaskInfo</code></td><td><strong>Host 侧的任务管理记录</strong>；专用字段中保存 args 地址、执行描述区地址及该任务的配置。</td><td>备份时<strong>从 TaskInfo 中提取 Device 地址</strong>。</td></tr>
-<tr><td>Device 执行描述区（context）</td><td><strong>Device 上的一块内存</strong>；例如 v100 MIX 的 <code>rtFftsPlusMixAicAivCtx_t</code>，保存 kernel 入口地址、args 地址、启动规模及调度配置。</td><td><code>TaskInfo.u.aicTaskInfo.descAlignBuf</code> 等字段保存<strong>指向描述区的地址</strong>；D2H 复制该描述区的字节内容。</td></tr>
-</tbody></table></div>
 <div class="table-wrap"><table><colgroup><col style="width:30%"><col style="width:34%"><col style="width:36%"></colgroup>
 <thead><tr><th>代码变量名称</th><th>主要作用</th><th>内存申请来源</th></tr></thead><tbody>
 <tr><td><code>aicTaskInfo.comm.args</code></td><td><strong>AICORE / AIVEC 的运行参数包。</strong>包含输入、输出的 Device 地址，tiling 地址或 tiling 数据；按算子格式还可包含 workspace 地址、标量等。具体布局由算子约定。普通 AIC/AIV 的执行配置直接写入 SQE；MIX 另有下行的 Device 执行描述区。</td><td><span class="origin mixed">按参数加载路径</span>拷贝路径由 Runtime 参数池申请，见下方“参数池申请点”；no-copy 路径使用传入的 <code>argsInfo.args</code>。</td></tr>
@@ -150,6 +152,52 @@ tags:
 <line class="arrow" x1="245" y1="221" x2="245" y2="335" marker-end="url(#context-args-arrow)"/><text class="pointer-label" x="365" y="282">args 地址指向</text>
 </svg>
 </figure>
+<details class="taskinfo-supplement"><summary>补充：TaskInfo 结构与地址关系</summary>
+<p>TaskInfo 通过所属 Stream 关联到 Runtime Context。</p>
+<div class="table-wrap" id="taskinfo-context"><table><colgroup><col style="width:25%"><col style="width:40%"><col style="width:35%"></colgroup>
+<thead><tr><th>对象</th><th>记录的内容</th><th>与 OpMemory 备份的关系</th></tr></thead><tbody>
+<tr><td><code>TaskInfo</code></td><td><strong>Host 侧的任务管理记录</strong>；专用字段中保存 args 地址、执行描述区地址及该任务的配置。</td><td>备份时<strong>从 TaskInfo 中提取 Device 地址</strong>。</td></tr>
+<tr><td>Device 执行描述区（context）</td><td><strong>Device 上的一块内存</strong>；例如 v100 MIX 的 <code>rtFftsPlusMixAicAivCtx_t</code>，保存 kernel 入口地址、args 地址、启动规模及调度配置。</td><td><code>TaskInfo.u.aicTaskInfo.descAlignBuf</code> 等字段保存<strong>指向描述区的地址</strong>；D2H 复制该描述区的字节内容。</td></tr>
+</tbody></table></div>
+<figure class="taskinfo-diagram" id="taskinfo-overview" aria-labelledby="taskinfo-title">
+<p class="structure-title" id="taskinfo-title">TaskInfo（Host 侧）</p>
+<div class="taskinfo-part"><strong>公共管理字段</strong>
+<div class="taskinfo-field-groups">
+<div class="taskinfo-field-group"><strong>身份与归属</strong>
+<p><code>stream</code>：所属的任务流</p>
+<p><code>type</code> / <code>typeName</code>：任务类型及名称</p>
+<p><code>id</code>：任务编号</p>
+<p><code>taskSn</code>：Dump、性能采集使用的跟踪序号</p>
+</div>
+<div class="taskinfo-field-group"><strong>下发信息</strong>
+<p><code>pos</code>：任务在提交队列中的位置</p>
+<p><code>stmArgPos</code>：参数资源的位置，完成后用于回收</p>
+<p><code>sqeNum</code>：该任务下发的 SQE（提交条目）数量</p>
+</div>
+<div class="taskinfo-field-group"><strong>处理状态</strong>
+<p><code>bindFlag</code>：所属流的模型绑定状态</p>
+<p><code>updateFlag</code>：保留、更新或禁用任务</p>
+<p><code>needPostProc</code>：完成后是否需要额外处理</p>
+</div>
+<div class="taskinfo-field-group"><strong>错误与性能</strong>
+<p><code>error</code> / <code>drvErr</code>：任务错误 / 驱动错误</p>
+<p><code>errorCode</code>：设备任务的具体错误码</p>
+<p><code>enableProfiling</code>：是否开启性能采集</p>
+<p><code>taskTrackTimeStamp</code>：任务跟踪时间戳</p>
+</div>
+</div>
+</div>
+<div class="taskinfo-part"><strong><code>u</code>：任务专用信息</strong>
+<p>按 <code>type</code> 使用对应成员，保存该类任务的参数地址、执行配置或控制信息。</p>
+<p>成员包括 <code>aicTaskInfo</code>、<code>aicpuTaskInfo</code>、<code>fftsPlusTask</code> 等，共用联合体的存储空间。</p>
+</div>
+<div class="taskinfo-part"><strong><code>pkgStat</code>：完成报告统计</strong>
+<p><code>expectPackage</code>：预计收到的完成报告数</p>
+<p><code>receivePackage</code>：已收到的完成报告数</p>
+</div>
+<figcaption class="source"><a data-src="taskinfo" href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/src/runtime/core/inc/task/task_info.hpp" target="_blank" rel="noopener noreferrer">TaskInfo 定义</a></figcaption>
+</figure>
+</details>
 </details>
 <details class="memory-group"><summary>② 流控制<span class="group-count">5 项</span></summary><p><strong>一个流可以包含多个任务，流控制任务本身也是其中的一项任务。</strong>执行到这项任务时，根据其控制动作，改变流的激活状态或后续执行位置。各个任务仍属于各自的流。</p>
 <p id="stream-sq-terms"><strong>Stream：Runtime 管理的任务流。</strong><strong>SQ（Submission Queue）：任务提交队列。</strong>SQ 存放提交给设备调度器的 SQE（Submission Queue Entry，任务提交描述条目）；Stream 记录关联的 SQ ID。</p>
