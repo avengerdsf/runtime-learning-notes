@@ -106,6 +106,15 @@
 .runtime-snapshot .module-backup-process p { margin: 0 0 10px; }
 .runtime-snapshot .module-backup-process ol { margin: 0; padding-left: 24px; }
 .runtime-snapshot .module-backup-process li { margin: 12px 0; }
+.runtime-snapshot .taskinfo-diagram { border: 1px solid var(--snapshot-blue-line); background: var(--snapshot-surface-muted); padding: 20px; }
+.runtime-snapshot .taskinfo-diagram .structure-title { max-width: none; margin: 0 0 14px; text-align: center; font-size: 23px; font-weight: 700; }
+.runtime-snapshot .taskinfo-part { border: 1px solid var(--snapshot-line); background: var(--snapshot-blue-light); padding: 14px 18px; margin-top: 14px; }
+.runtime-snapshot .taskinfo-part > strong { display: block; margin-bottom: 8px; }
+.runtime-snapshot .taskinfo-diagram p { margin: 6px 0; }
+.runtime-snapshot .taskinfo-members { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.runtime-snapshot .taskinfo-member { border: 1px solid var(--snapshot-line); background: var(--snapshot-surface); padding: 12px; min-width: 0; }
+.runtime-snapshot .taskinfo-member > strong { display: block; }
+.runtime-snapshot .taskinfo-diagram .source { margin-top: 14px; }
 .runtime-snapshot .origin { display: block; margin-bottom: 5px; font-weight: 700; }
 .runtime-snapshot .origin.internal { color: var(--snapshot-green); }
 .runtime-snapshot .origin.external { color: var(--snapshot-brown); }
@@ -119,6 +128,9 @@
 .runtime-snapshot footer { max-width: var(--snapshot-prose-width); margin: 40px auto 0; padding-top: 20px; border-top: 2px solid var(--snapshot-ink); color: var(--snapshot-muted); font-size: max(17px, .95em); }
 
 @container kb-reading (max-width: 760px) {
+  .runtime-snapshot .taskinfo-diagram { padding: 14px; }
+  .runtime-snapshot .taskinfo-part { padding: 12px; }
+  .runtime-snapshot .taskinfo-members { grid-template-columns: 1fr; }
   .runtime-snapshot { font-size: 17px; }
   .runtime-snapshot h2 { font-size: 25px; }
   .runtime-snapshot .runtime-snapshot-toc { gap: 8px 15px; }

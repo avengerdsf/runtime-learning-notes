@@ -15,6 +15,8 @@ figure img,figure svg{display:block;width:100%;max-width:100%;height:auto}
 @media(max-width:760px){body{font-size:17px}main{padding:28px 20px;margin:0 auto}h1{font-size:31px}h2{font-size:25px}.toc{gap:8px 15px;padding:12px 20px}th,td{padding:10px}.steps>li{padding-left:47px}.steps h3{font-size:20px}.lead{font-size:19px}}
 .context-map .group-title{font-size:21px;font-weight:700}.context-map .field{font-size:18px}.context-map .port{fill:#fff;stroke:#7c8fa0;stroke-width:1.5}.context-map .pointer-label{font-size:18px;fill:var(--muted)}.context-caption{margin-top:13px;font-size:18px}
 @media(max-width:760px){.steps .substeps{padding:12px 12px 12px 34px}}
+.taskinfo-diagram{border:1px solid #9bb5c9;background:#fbfcfe;padding:20px}.taskinfo-diagram .structure-title{margin:0 0 14px;text-align:center;font-size:23px;font-weight:700}.taskinfo-part{border:1px solid var(--line);background:var(--blue-light);padding:14px 18px;margin-top:14px}.taskinfo-part>strong{display:block;margin-bottom:8px}.taskinfo-diagram p{margin:6px 0}.taskinfo-members{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.taskinfo-member{border:1px solid var(--line);background:var(--paper);padding:12px;min-width:0}.taskinfo-member>strong{display:block}.taskinfo-diagram .source{margin-top:14px}
+@media(max-width:760px){.taskinfo-diagram{padding:14px}.taskinfo-part{padding:12px}.taskinfo-members{grid-template-columns:1fr}}
 @media print{body{background:#fff}main{max-width:none;margin:0;padding:0}.toc{display:none}section{break-before:auto}figure,table tr,.steps>li{break-inside:avoid}a{color:inherit}details{display:block}details>*{display:block}footer{margin-top:25px}}
 </style>
 </head>
@@ -93,29 +95,48 @@ figure img,figure svg{display:block;width:100%;max-width:100%;height:auto}
 <p class="chain"><code>ModelBackup(devId, false)</code><span class="sep">→</span><code>SinkTaskMemoryBackup</code><span class="sep">→</span><code>OpMemoryBackup</code><br><code>Context 模型列表</code><span class="sep">→</span><code>Model::StreamList_()</code><span class="sep">→</span><code>TaskInfo</code><span class="sep">→</span><code>opVirtualAddrs_</code></p>
 <p><code>OpMemoryBackup()</code> 遍历该 Device 上活跃 Context 的模型和 stream，从任务字段提取 <strong>Device 地址、长度</strong>，逐项追加到 <code>opVirtualAddrs_</code>，并累加 <code>opTotalHostMemSize_</code>。</p>
 <p>v100 使用 stream 的延迟回收任务 ID 列表，通过 TaskFactory 查任务；v200_base 使用任务队列的 head/tail 遍历 TaskInfo。每个任务依次收集参数地址与 func-call 地址。</p>
-<details class="memory-group"><summary>① 算子参数与 Device 执行上下文<span class="group-count">5 项</span></summary>
+<figure class="taskinfo-diagram" id="taskinfo-overview" aria-labelledby="taskinfo-title">
+<p class="structure-title" id="taskinfo-title">TaskInfo（Host 侧）</p>
+<div class="taskinfo-part"><strong>公共管理字段</strong>
+<p><code>stream</code> · <code>type</code> / <code>typeName</code> · <code>id</code> / <code>taskSn</code></p>
+<p><code>pos</code> · <code>stmArgPos</code> · <code>sqeNum</code></p>
+<p><code>bindFlag</code> · <code>updateFlag</code> · <code>needPostProc</code> · <code>error</code> / <code>drvErr</code> / <code>errorCode</code></p>
+<p><code>enableProfiling</code> · <code>taskTrackTimeStamp</code></p>
+</div>
+<div class="taskinfo-part"><strong><code>u</code>：任务专用联合体，按 <code>type</code> 选择成员</strong>
+<div class="taskinfo-members">
+<div class="taskinfo-member"><strong><code>aicTaskInfo</code></strong><p><code>comm.args</code> · <code>descAlignBuf</code></p><p><code>kernel</code> · <code>tilingKey</code> · <code>funcAddr</code></p></div>
+<div class="taskinfo-member"><strong><code>aicpuTaskInfo</code></strong><p><code>comm.args</code></p><p><code>soName</code> · <code>funcName</code></p></div>
+<div class="taskinfo-member"><strong><code>memWaitValueTask</code></strong><p><code>devAddr</code> · <code>value</code> · <code>flag</code></p><p><code>funcCallSvmMem2</code></p></div>
+</div>
+<p>其他成员：<code>fftsPlusTask</code>、<code>memcpyAsyncTaskInfo</code>、<code>eventWaitTaskInfo</code> 等</p>
+</div>
+<div class="taskinfo-part"><strong><code>pkgStat</code>：完成报告统计</strong><p><code>expectPackage</code> · <code>receivePackage</code> · <code>packageReportNum</code></p></div>
+<figcaption class="source"><a data-src="taskinfo">TaskInfo 定义</a></figcaption>
+</figure>
+<details class="memory-group"><summary>① 算子参数与 Device 执行描述区<span class="group-count">5 项</span></summary>
 <p>TaskInfo 通过所属 Stream 关联到 Runtime Context。</p>
 <div class="table-wrap" id="taskinfo-context"><table><colgroup><col style="width:25%"><col style="width:40%"><col style="width:35%"></colgroup>
 <thead><tr><th>对象</th><th>记录的内容</th><th>与 OpMemory 备份的关系</th></tr></thead><tbody>
-<tr><td><code>TaskInfo</code></td><td>Runtime 管理单个任务的结构，记录任务类型、所属 Stream、任务 ID，以及参数块和执行描述区的地址等信息</td><td>备份时<strong>从 TaskInfo 中提取 Device 地址</strong></td></tr>
-<tr><td>Device 执行上下文描述区</td><td>按任务类型保存 kernel 入口地址、args 地址、启动规模及调度配置等；例如 <code>rtFftsPlusMixAicAivCtx_t</code></td><td><strong>D2H 复制描述区的字节内容</strong>，其地址由 <code>TaskInfo.u.aicTaskInfo.descAlignBuf</code> 等字段记录</td></tr>
+<tr><td><code>TaskInfo</code></td><td><strong>Host 侧的任务管理记录</strong>；专用字段中保存 args 地址、执行描述区地址及该任务的配置。</td><td>备份时<strong>从 TaskInfo 中提取 Device 地址</strong>。</td></tr>
+<tr><td>Device 执行描述区（context）</td><td><strong>Device 上的一块内存</strong>；例如 v100 MIX 的 <code>rtFftsPlusMixAicAivCtx_t</code>，保存 kernel 入口地址、args 地址、启动规模及调度配置。</td><td><code>TaskInfo.u.aicTaskInfo.descAlignBuf</code> 等字段保存<strong>指向描述区的地址</strong>；D2H 复制该描述区的字节内容。</td></tr>
 </tbody></table></div>
 <div class="table-wrap"><table><colgroup><col style="width:30%"><col style="width:34%"><col style="width:36%"></colgroup>
 <thead><tr><th>代码变量名称</th><th>主要作用</th><th>内存申请来源</th></tr></thead><tbody>
-<tr><td><code>aicTaskInfo.comm.args</code></td><td><strong>AICORE / AIVEC 的运行参数包。</strong>包含输入、输出的 Device 地址，tiling 地址或 tiling 数据；按算子格式还可包含 workspace 地址、标量等。具体布局由算子约定。普通 AIC/AIV 的执行配置直接写入 SQE；MIX 另有下行的 context 描述区。</td><td><span class="origin mixed">按参数加载路径</span>拷贝路径由 Runtime 参数池申请，见下方“参数池申请点”；no-copy 路径使用传入的 <code>argsInfo.args</code>。</td></tr>
-<tr><td><code>aicTaskInfo.descAlignBuf</code></td><td><strong>v100 的 AIC / AIV MIX 任务在 Device 上的执行上下文描述区。</strong>保存执行类型、kernel 入口地址、参数包地址、启动规模、AIC/AIV 配比，以及调度、QoS 和指令预取等配置，SQE 指向该描述区。</td><td><span class="origin internal">Runtime 内部申请</span>复用 MIX 参数池 entry，或由 <a data-src="davinci" data-line="112">AllocFftsMixDescMemForDavinciTask</a> 申请 <code>descBuf</code>，对齐后赋值。</td></tr>
+<tr><td><code>aicTaskInfo.comm.args</code></td><td><strong>AICORE / AIVEC 的运行参数包。</strong>包含输入、输出的 Device 地址，tiling 地址或 tiling 数据；按算子格式还可包含 workspace 地址、标量等。具体布局由算子约定。普通 AIC/AIV 的执行配置直接写入 SQE；MIX 另有下行的 Device 执行描述区。</td><td><span class="origin mixed">按参数加载路径</span>拷贝路径由 Runtime 参数池申请，见下方“参数池申请点”；no-copy 路径使用传入的 <code>argsInfo.args</code>。</td></tr>
+<tr><td><code>aicTaskInfo.descAlignBuf</code></td><td><strong>指向 v100 AIC / AIV MIX 任务的 Device 执行描述区。</strong>描述区保存执行类型、kernel 入口地址、参数包地址、启动规模、AIC/AIV 配比，以及调度、QoS 和指令预取等配置，SQE 指向该描述区。</td><td><span class="origin internal">Runtime 内部申请</span>复用 MIX 参数池 entry，或由 <a data-src="davinci" data-line="112">AllocFftsMixDescMemForDavinciTask</a> 申请 <code>descBuf</code>，对齐后赋值。</td></tr>
 <tr><td><code>aicpuTaskInfo.comm.args</code></td><td><strong>AICPU 算子的运行参数包。</strong>保存该算子所需的输入、输出地址、标量及自定义参数，布局由 AICPU 算子的调用格式约定。执行控制信息写入 AICPU SQE。</td><td><span class="origin mixed">按参数加载路径</span>拷贝路径由 Runtime 参数池申请；no-copy 路径使用传入的 Device 参数地址。</td></tr>
-<tr><td><code>fftsPlusTask.descAlignBuf</code></td><td><strong>FFTS Plus 任务在 Device 上的执行上下文描述区。</strong>包含各子任务的执行描述，按 context 类型记录执行配置、参数地址、启动规模和前后继依赖等信息；参数地址指向的独立内存需另行判断备份来源。</td><td><span class="origin mixed">按 descAddrType</span>HOST：参数池或 <a data-src="ffts" data-line="284">FftsPlusTmpAllocH2D</a> 申请；DEVICE：复用传入的 <code>fftsPlusTaskInfo.descBuf</code>。</td></tr>
+<tr><td><code>fftsPlusTask.descAlignBuf</code></td><td><strong>指向 FFTS Plus 任务的 Device 执行描述区。</strong>描述区包含各子任务的执行描述，按 context 类型记录执行配置、参数地址、启动规模和前后继依赖等信息；参数地址指向的独立内存需另行判断备份来源。</td><td><span class="origin mixed">按 descAddrType</span>HOST：参数池或 <a data-src="ffts" data-line="284">FftsPlusTmpAllocH2D</a> 申请；DEVICE：复用传入的 <code>fftsPlusTaskInfo.descBuf</code>。</td></tr>
 <tr><td><code>fusionKernelTask.args</code></td><td><strong>融合任务的运行参数包。</strong>组织多个子算子执行所需的参数，供融合任务中的相应子算子读取。执行控制信息写入各子任务的 SQE。</td><td><span class="origin internal">Runtime 参数加载</span><a data-src="fusion">DavidStream::LoadArgsInfo</a> 提供 <code>result.kerArgs</code>，再由 <code>SetArgsFusionKernel</code> 写入任务。</td></tr>
 </tbody></table></div>
 <figure class="diagram-wrap" id="context-description">
 <svg class="diagram context-map" viewBox="0 0 1050 750" role="img" aria-labelledby="context-map-title context-map-desc">
-<title id="context-map-title">Context 描述区中的字段及地址关系</title>
-<desc id="context-map-desc">TaskInfo 的 descAlignBuf 指向 Device context 描述区。描述区包含执行类型、启动规模、任务依赖、调度和访存配置、kernel 入口地址与运行参数地址。入口地址指向算子代码，参数地址指向包含数据地址和其他参数的运行参数包。</desc>
+<title id="context-map-title">Device 执行描述区中的字段及地址关系</title>
+<desc id="context-map-desc">Host 侧 TaskInfo 的 u.aicTaskInfo.descAlignBuf 保存指向 Device 执行描述区的地址。以 v100 MIX 任务为例，描述区包含执行类型、启动规模、任务依赖、调度和访存配置、kernel 入口地址与运行参数地址。入口地址指向算子代码，参数地址指向包含数据地址和其他参数的运行参数包。</desc>
 <defs><marker id="context-map-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#7c8fa0"/></marker></defs>
-<g data-box="task-pointer"><rect class="old" x="185" y="18" width="300" height="52"/><text x="335" y="50">TaskInfo 中的 descAlignBuf</text></g>
+<g data-box="task-pointer"><rect class="old" x="185" y="8" width="300" height="70"/><text class="field" x="335" y="35">Host 中的 TaskInfo</text><text class="fn" x="335" y="62">u.aicTaskInfo.descAlignBuf</text></g>
 <rect x="20" y="94" width="630" height="594" fill="#fbfcfe" stroke="#9bb5c9" stroke-width="1.4"/>
-<text class="heading" x="335" y="126">Device context 描述区</text>
+<text class="heading" x="335" y="126">Device 执行描述区（context）</text>
 <g data-box="execution-type"><rect class="old" x="44" y="151" width="275" height="105"/><text class="group-title" x="181.5" y="178">执行类型与控制开关</text><text class="field" x="181.5" y="206">contextType（AIC / AIV / MIX）</text><text class="field" x="181.5" y="234">dumpSwitch 等</text></g>
 <g data-box="launch-size"><rect class="old" x="337" y="151" width="289" height="105"/><text class="group-title" x="481.5" y="178">启动规模与配比</text><text class="field" x="481.5" y="206">threadDim、*Blockdim</text><text class="field" x="481.5" y="234">*BlockRatioN（MIX）</text></g>
 <g data-box="dependencies"><rect class="old" x="44" y="274" width="275" height="126"/><text class="group-title" x="181.5" y="301">任务依赖</text><text class="field" x="181.5" y="329">predCntInit、predCnt</text><text class="field" x="181.5" y="356">successorNum、successorList</text><text class="field" x="181.5" y="383">srcSlot</text></g>
@@ -124,25 +145,25 @@ figure img,figure svg{display:block;width:100%;max-width:100%;height:auto}
 <g data-box="parameter-address"><rect class="old" x="44" y="559" width="582" height="113"/><text class="group-title" x="335" y="587">运行参数地址</text><text class="field" x="335" y="618">*TaskParamPtr* / Offset</text><text x="335" y="649">指向 kernel 读取的参数块</text></g>
 <g data-box="kernel-code"><rect class="new" x="760" y="426" width="270" height="113"/><text class="group-title" x="895" y="470">算子代码</text><text x="895" y="504">Device 上的 kernel</text></g>
 <g data-box="parameter-buffer"><rect class="new" x="760" y="559" width="270" height="164"/><text class="group-title" x="895" y="591">运行参数包</text><text x="895" y="627">输入 / 输出地址</text><text x="895" y="661">workspace / tiling 地址</text><text x="895" y="695">标量、tiling 数据等</text></g>
-<line class="arrow" x1="335" y1="70" x2="335" y2="94" marker-end="url(#context-map-arrow)"/>
+<line class="arrow" x1="335" y1="78" x2="335" y2="94" marker-end="url(#context-map-arrow)"/>
 <line class="arrow" x1="626" y1="482.5" x2="760" y2="482.5" marker-end="url(#context-map-arrow)"/>
 <line class="arrow" x1="626" y1="615.5" x2="760" y2="615.5" marker-end="url(#context-map-arrow)"/>
 <circle class="port" cx="650" cy="482.5" r="3"/><circle class="port" cx="650" cy="615.5" r="3"/>
 <text class="pointer-label" x="695" y="467">指向</text><text class="pointer-label" x="695" y="600">指向</text>
 </svg>
-<figcaption class="context-caption">AIC/AIV 与 MIX 的字段按作用分组；FFTS Plus 的描述区可包含多份不同类型的 context。<a href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/pkg_inc/runtime/rt_external_ffts_define.h#L117" target="_blank" rel="noopener">字段定义</a></figcaption>
+<figcaption class="context-caption">以 v100 MIX 的执行描述结构为主，按字段作用分组；FFTS Plus 的描述区可包含多份不同类型的 context。<a href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/pkg_inc/runtime/rt_external_ffts_define.h#L181" target="_blank" rel="noopener">字段定义</a></figcaption>
 </figure>
 <p class="key"><strong>tiling 地址指向 Device 中的 tiling 数据，后者保存计算规模、每核分工和核内分块等配置，kernel 通过该地址读取这些配置。</strong></p>
-<p><strong>context 里保存 args 地址及执行配置；args 的 D2H 保存该地址处的参数块内容。</strong>参数块内容可以包括输入、输出等地址值，标量，以及内联的 tiling 数据。</p>
+<p><strong>MIX 的 Device 执行描述区保存 args 地址及执行配置；args 的 D2H 保存该地址处的参数块内容。</strong>参数块内容可以包括输入、输出等地址值，标量，以及内联的 tiling 数据。</p>
 <figure class="diagram-wrap" id="context-args-backup">
 <svg class="diagram context-map" viewBox="0 0 1050 490" role="img" aria-labelledby="context-args-title context-args-desc">
-<title id="context-args-title">MIX 任务中 context 与 args 的 Device 到 Host 备份</title>
-<desc id="context-args-desc">Device 的 context 区保存执行配置和 args 的地址，args 地址指向另一个参数区域。context 的 D2H 复制 context 内容，args 的 D2H 复制参数块内容，形成两份 Host 副本。</desc>
+<title id="context-args-title">MIX 任务中执行描述区与 args 的 Device 到 Host 备份</title>
+<desc id="context-args-desc">Device 执行描述区保存执行配置和 args 的地址，args 地址指向另一个参数区域。描述区的 D2H 复制执行描述内容，args 的 D2H 复制参数块内容，形成两份 Host 副本。</desc>
 <defs><marker id="context-args-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#7c8fa0"/></marker></defs>
 <text class="heading" x="525" y="30">MIX 任务的 Device → Host 备份</text>
 <text class="group-title" x="245" y="73">Device</text><text class="group-title" x="855" y="73">Host</text>
-<g data-box="device-context"><rect class="old" x="20" y="95" width="450" height="126"/><text class="group-title" x="245" y="126">context 区（descAlignBuf）</text><text x="245" y="160">执行配置 + args 的 Device 地址</text><text class="field" x="245" y="192">参数地址字段记录 args 的位置</text></g>
-<g data-box="host-context"><rect class="new" x="680" y="95" width="350" height="126"/><text class="group-title" x="855" y="126">context 的 Host 副本</text><text x="855" y="160">执行配置 + 原 args 地址值</text><text class="field" x="855" y="192">复制 context 区的内容</text></g>
+<g data-box="device-context"><rect class="old" x="20" y="95" width="450" height="126"/><text class="group-title" x="245" y="126">执行描述区（descAlignBuf 指向）</text><text x="245" y="160">执行配置 + args 的 Device 地址</text><text class="field" x="245" y="192">参数地址字段记录 args 的位置</text></g>
+<g data-box="host-context"><rect class="new" x="680" y="95" width="350" height="126"/><text class="group-title" x="855" y="126">描述区的 Host 副本</text><text x="855" y="160">执行配置 + 原 args 地址值</text><text class="field" x="855" y="192">复制执行描述区的内容</text></g>
 <g data-box="device-args"><rect class="old" x="20" y="335" width="450" height="126"/><text class="group-title" x="245" y="366">args 参数块（comm.args）</text><text x="245" y="400">输入 / 输出地址值、标量、tiling 数据等</text><text class="field" x="245" y="432">保存 kernel 的运行参数</text></g>
 <g data-box="host-args"><rect class="new" x="680" y="335" width="350" height="126"/><text class="group-title" x="855" y="366">args 的 Host 副本</text><text x="855" y="400">参数块中的字节内容</text><text class="field" x="855" y="432">地址值、标量、tiling 数据等</text></g>
 <line class="arrow" x1="470" y1="158" x2="680" y2="158" marker-end="url(#context-args-arrow)"/><text class="pointer-label" x="575" y="142">D2H</text>
@@ -362,6 +383,7 @@ const toc=document.querySelector('.toc');
 new ResizeObserver(()=>document.documentElement.style.setProperty('--toc-offset',`${toc.getBoundingClientRect().height+16}px`)).observe(toc);
 const commit='c06e4cccb34ae5c5b616544250718879927da0d7';
 const files={helper:'src/runtime/feature/snapshot/snapshot_process_helper.cc',snapshot:'src/runtime/feature/snapshot/device_snapshot.cc',v100:'src/runtime/feature/snapshot/v100/device_snapshot_adapter.cc',v200:'src/runtime/feature/snapshot/v200_base/device_snapshot_adapter.cc',runtime:'src/runtime/core/src/runtime.cc',runtimehpp:'src/runtime/core/inc/runtime.hpp',driver:'src/runtime/driver/npu_driver.cc',api:'src/runtime/api/api_c_snapshot.cc',impl:'src/runtime/api/impl/api_impl_snapshot.cc',model:'src/runtime/feature/model/model_rebuild.cc',pool:'src/runtime/core/src/pool/h2d_copy_mgr.cc',loader:'src/runtime/core/src/kernel/arg_loader/uma_arg_loader.cc',context:'src/runtime/core/src/context/context.cc',device:'src/runtime/core/src/device/raw_device.cc',stream:'src/runtime/core/src/stream/stream.cc'};
+Object.assign(files,{taskinfo:'src/runtime/core/inc/task/task_info.hpp'});
 Object.assign(files,{davinci:'src/runtime/core/src/task/task_info/davinci/davinci_kernel_task_v100.cc',ffts:'src/runtime/feature/ffts/ffts_task.cc',fusion:'src/runtime/feature/fusion/fusion_c.cc',fusiontask:'src/runtime/feature/fusion/fusion_task.cc',condtask:'src/runtime/core/src/task/task_info/cond_op/cond_op_stream_task.cc',memtask:'src/runtime/core/src/task/task_info/memory/memory_task.cc',eventc:'src/runtime/core/src/event/event_c.cc',rdma:'src/runtime/feature/ffts/rdma_task.cc',activetask:'src/runtime/core/src/task/task_info/stream/stream_task_active.cc',program:'src/runtime/core/src/kernel/program.cc',mdltask:'src/runtime/core/src/task/task_info/model/model_update_task.cc'});
 document.querySelectorAll('a[data-src]').forEach(a=>{a.href='https://gitcode.com/cann/runtime/blob/'+commit+'/'+files[a.dataset.src]+(a.dataset.line?'#L'+a.dataset.line:'');a.target='_blank';a.rel='noopener';});
 </script>
