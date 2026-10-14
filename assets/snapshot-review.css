@@ -1,145 +1,511 @@
-.page .center:has(> article .runtime-snapshot) > .page-header > .popover-hint,
-.page .center > article:has(.runtime-snapshot) {
-  --snapshot-font-size: clamp(17px, calc(15px + .3vw), 21px);
-  --snapshot-prose-width: calc(45 * var(--snapshot-font-size));
-  width: 100%;
-  max-width: 2200px;
-  font-family: "Times New Roman", "SimSun", serif;
-  margin-inline: auto;
+.page .center > article:has(.runtime-original.runtime-snapshot) {width:100%;max-width:none;margin:0;padding:0;border:0;border-radius:0;background:transparent;container:none;overflow-wrap:normal;}
+.page .center:has(> article .runtime-original.runtime-snapshot) > .page-header > .popover-hint {display:none;}
+html:has(.runtime-original.runtime-snapshot) {scroll-padding-top:calc(84px + var(--kb-document-toc-height,120px) + 16px);}
+.runtime-original.runtime-snapshot {all:revert;display:flow-root;}
+.runtime-original.runtime-snapshot :where(*):not(:where(svg,svg *)) {all:revert;}
+.runtime-original.runtime-snapshot {
+  --ink:#253548;
+  --muted:#607086;
+  --line:#d5dee7;
+  --blue:#245b85;
+  --blue-light:#eef5fa;
+  --green:#316a53;
+  --green-light:#edf6f0;
+  --paper:#fff;
+  --bg:#f5f6f8;
 }
-
-.page .center:has(> article .runtime-snapshot) > .page-header > .popover-hint .article-title {
-  max-width: var(--snapshot-prose-width);
-  margin-inline: auto;
+.runtime-original.runtime-snapshot * {
+  box-sizing: border-box;
 }
-
-.runtime-snapshot {
-  --snapshot-ink: var(--text);
-  --snapshot-muted: var(--muted);
-  --snapshot-line: var(--line);
-  --snapshot-blue: var(--accent);
-  --snapshot-surface: var(--surface-solid);
-  --snapshot-surface-muted: var(--surface-muted);
-  --snapshot-blue-light: color-mix(in srgb, var(--snapshot-blue) 8%, var(--snapshot-surface));
-  --snapshot-blue-line: color-mix(in srgb, var(--snapshot-blue) 35%, var(--snapshot-line));
-  --snapshot-green: color-mix(in srgb, #316a53 60%, var(--snapshot-ink));
-  --snapshot-green-light: color-mix(in srgb, var(--snapshot-green) 8%, var(--snapshot-surface));
-  --snapshot-green-line: color-mix(in srgb, var(--snapshot-green) 35%, var(--snapshot-line));
-  --snapshot-brown: color-mix(in srgb, #8c541e 60%, var(--snapshot-ink));
-  --snapshot-brown-light: color-mix(in srgb, var(--snapshot-brown) 8%, var(--snapshot-surface));
-  --snapshot-arrow: color-mix(in srgb, var(--snapshot-muted) 75%, var(--snapshot-ink));
-  min-width: 0;
-  color: var(--snapshot-ink);
+.runtime-original.runtime-snapshot {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--toc-offset, 110px);
+}
+.runtime-original.runtime-snapshot {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
   font-family: "Times New Roman", "SimSun", serif;
-  font-size: var(--snapshot-font-size);
+  font-size: 18px;
   line-height: 1.7;
+}
+.runtime-original.runtime-snapshot a {
+  color: var(--blue);
+  text-underline-offset: 4px;
+}
+.runtime-original.runtime-snapshot code {
+  font-family: "Times New Roman", "SimSun", serif;
+  font-size: 1em;
   overflow-wrap: anywhere;
 }
-
-.runtime-snapshot *, .runtime-snapshot *::before, .runtime-snapshot *::after { box-sizing: border-box; }
-.runtime-snapshot a { color: var(--snapshot-blue); text-decoration: underline; text-underline-offset: 4px; }
-.runtime-snapshot code { padding: 0; border-radius: 0; background: transparent; color: inherit; font: inherit; overflow-wrap: anywhere; }
-.runtime-snapshot pre { max-width: var(--snapshot-prose-width); margin: 20px auto; padding: 18px 22px; border: 0; border-left: 3px solid var(--snapshot-blue); border-radius: 0; background: var(--snapshot-blue-light); font: inherit; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
-.runtime-snapshot pre > code { display: block; padding: 0; overflow: visible; white-space: inherit; }
-.runtime-snapshot :is(p, li, tbody) { color: inherit; line-height: inherit; }
-.runtime-snapshot p { max-width: var(--snapshot-prose-width); margin: 12px auto; }
-.runtime-snapshot :is(h2, h3) { max-width: var(--snapshot-prose-width); margin: 0 auto 20px; color: var(--snapshot-ink); font-family: inherit; font-weight: 700; line-height: 1.35; }
-.runtime-snapshot h2 { font-size: 1.45em; }
-.runtime-snapshot h3 { margin-top: 28px; font-size: 1.2em; }
-.runtime-snapshot strong { font-weight: 700; }
-.runtime-snapshot > header { max-width: var(--snapshot-prose-width); margin: 0 auto; padding-bottom: 20px; border-bottom: 2px solid var(--snapshot-ink); }
-.runtime-snapshot .meta, .runtime-snapshot .source { font-size: max(17px, .95em); }
-.runtime-snapshot .meta { color: var(--snapshot-muted); }
-.runtime-snapshot .runtime-snapshot-toc { position: sticky; top: 84px; z-index: 10; display: flex; flex-wrap: wrap; gap: 8px 28px; max-width: var(--snapshot-prose-width); margin: 0 auto 14px; padding: 14px 0; background: var(--snapshot-surface); border-bottom: 1px solid var(--snapshot-line); }
-.runtime-snapshot .runtime-snapshot-toc a { max-width: 100%; }
-.runtime-snapshot section { min-width: 0; padding-top: 40px; margin-top: 14px; scroll-margin-top: 84px; }
-.runtime-snapshot #snapshot-advise { scroll-margin-top: 128px; }
-.runtime-snapshot section > ul { max-width: var(--snapshot-prose-width); margin-inline: auto; padding-left: 24px; }
-.runtime-snapshot .section-no { margin-right: 13px; color: var(--snapshot-blue); font-size: .8em; }
-.runtime-snapshot figure { min-width: 0; max-width: 1600px; margin: 24px auto 30px; overflow-x: auto; overscroll-behavior-x: contain; }
-.runtime-snapshot figure > svg.diagram { display: block; width: 100%; max-width: 100%; height: auto; }
-.runtime-snapshot figure > img { display: block; width: 100%; max-width: 1050px; height: auto; margin: 0 auto; border-radius: 0; }
-.runtime-snapshot .diagram text { fill: var(--snapshot-ink); font-family: "Times New Roman", "SimSun", serif; font-size: 19px; text-anchor: middle; }
-.runtime-snapshot .diagram .heading { font-size: 24px; font-weight: 700; }
-.runtime-snapshot .diagram .fn { font-size: 18px; }
-.runtime-snapshot .diagram .old { fill: var(--snapshot-blue-light); stroke: var(--snapshot-blue-line); stroke-width: 1.3; }
-.runtime-snapshot .diagram .new { fill: var(--snapshot-green-light); stroke: var(--snapshot-green-line); stroke-width: 1.3; }
-.runtime-snapshot .diagram .arrow { fill: none; stroke: var(--snapshot-arrow); stroke-width: 1.5; }
-.runtime-snapshot .diagram marker path { fill: var(--snapshot-arrow); }
-.runtime-snapshot .diagram .phase { fill: var(--snapshot-muted); font-size: 18px; text-anchor: start; }
-.runtime-snapshot .diagram .divider { stroke: var(--snapshot-line); stroke-dasharray: 5 5; }
-.runtime-snapshot .context-map .group-title { font-size: 21px; font-weight: 700; }
-.runtime-snapshot .context-map .field { font-size: 18px; }
-.runtime-snapshot .context-map .port { fill: var(--snapshot-surface); stroke: var(--snapshot-arrow); stroke-width: 1.5; }
-.runtime-snapshot .context-map .pointer-label { fill: var(--snapshot-muted); font-size: 18px; }
-.runtime-snapshot .context-map rect[fill="#fbfcfe"] { fill: var(--snapshot-surface-muted); stroke: var(--snapshot-blue-line); }
-.runtime-snapshot .context-caption { margin-top: 13px; }
-.runtime-snapshot .table-wrap { min-width: 0; max-width: 1600px; margin: 20px auto; overflow-x: auto; overscroll-behavior-x: contain; }
-.runtime-snapshot .table-wrap > .table-container { margin: 0; padding: 0; overflow: visible; }
-.runtime-snapshot .table-wrap table { display: table; width: 100%; min-width: 900px; max-width: none; margin: 0; padding: 0; border-collapse: collapse; font-size: max(17px, .95em); line-height: 1.55; overflow: visible; }
-.runtime-snapshot thead { font-family: inherit; }
-.runtime-snapshot th { background: var(--snapshot-surface-muted); color: var(--snapshot-blue); font-weight: 700; text-align: left; }
-.runtime-snapshot :is(th, td) { padding: 13px 15px; border-bottom: 1px solid var(--snapshot-line); vertical-align: top; }
-.runtime-snapshot td:first-child { min-width: 150px; }
-.runtime-snapshot td a { overflow-wrap: anywhere; }
-.runtime-snapshot .key { padding: 4px 0 4px 18px; margin-block: 20px; border-left: 3px solid var(--snapshot-blue); }
-.runtime-snapshot .chain { padding-block: 15px; border-top: 1px solid var(--snapshot-line); border-bottom: 1px solid var(--snapshot-line); line-height: 1.9; }
-.runtime-snapshot .chain .sep { padding-inline: 8px; color: var(--snapshot-muted); }
-.runtime-snapshot .source { margin-block: 18px; }
-.runtime-snapshot .source a { margin-right: 20px; }
-.runtime-snapshot .steps { max-width: var(--snapshot-prose-width); margin: 20px auto; padding: 0; list-style: none; counter-reset: step; }
-.runtime-snapshot .steps > li { position: relative; padding: 15px 0 20px 62px; border-bottom: 1px solid var(--snapshot-line); counter-increment: step; }
-.runtime-snapshot .steps > li::before { position: absolute; top: 12px; left: 0; color: var(--snapshot-blue); font-size: 1.6em; line-height: 1.4; content: counter(step, decimal-leading-zero); }
-.runtime-snapshot .steps h3 { margin: 0 0 7px; font-size: 1.15em; }
-.runtime-snapshot .steps p { margin: 5px 0; }
-.runtime-snapshot .scope { margin-top: 23px; color: var(--snapshot-green); font-weight: 700; }
-.runtime-snapshot .substeps { margin: 15px 0; padding-left: 28px; }
-.runtime-snapshot .substeps li { padding-block: 5px; }
-.runtime-snapshot .substeps code { font-weight: 700; }
-.runtime-snapshot details { min-width: 0; max-width: 1600px; margin: 22px auto; padding-top: 14px; border-top: 1px solid var(--snapshot-line); }
-.runtime-snapshot summary { max-width: var(--snapshot-prose-width); margin-inline: auto; color: var(--snapshot-blue); font-size: 1.05em; font-weight: 700; cursor: pointer; }
-.runtime-snapshot .memory-group { margin-block: 0; padding-block: 18px; }
-.runtime-snapshot .memory-group summary { font-size: 1.2em; }
-.runtime-snapshot .memory-group .group-count { margin-left: 20px; color: var(--snapshot-muted); font-size: .85em; font-weight: 400; }
-.runtime-snapshot .memory-group p { margin-block: 15px; }
-.runtime-snapshot .memory-group .table-wrap { margin-bottom: 5px; }
-.runtime-snapshot .module-backup-process { min-width: 0; max-width: var(--snapshot-prose-width); padding: 18px 22px; margin: 22px auto; border: 1px solid var(--snapshot-line); }
-.runtime-snapshot .module-backup-process p { margin: 0 0 10px; }
-.runtime-snapshot .module-backup-process ol { margin: 0; padding-left: 24px; }
-.runtime-snapshot .module-backup-process li { margin: 12px 0; }
-.runtime-snapshot .taskinfo-diagram { border: 1px solid var(--snapshot-blue-line); background: var(--snapshot-surface-muted); padding: 20px; }
-.runtime-snapshot .taskinfo-diagram .structure-title { max-width: none; margin: 0 0 14px; text-align: center; font-size: 23px; font-weight: 700; }
-.runtime-snapshot .taskinfo-part { border: 1px solid var(--snapshot-line); background: var(--snapshot-blue-light); padding: 14px 18px; margin-top: 14px; }
-.runtime-snapshot .taskinfo-part > strong { display: block; margin-bottom: 8px; }
-.runtime-snapshot .taskinfo-diagram p { margin: 6px 0; }
-.runtime-snapshot .taskinfo-field-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.runtime-snapshot .taskinfo-field-group { border: 1px solid var(--snapshot-line); background: var(--snapshot-surface); padding: 12px; min-width: 0; }
-.runtime-snapshot .taskinfo-field-group > strong { display: block; }
-.runtime-snapshot .taskinfo-diagram .source { margin-top: 14px; }
-.runtime-snapshot .taskinfo-supplement > summary { font-size: 19px; }
-.runtime-snapshot .origin { display: block; margin-bottom: 5px; font-weight: 700; }
-.runtime-snapshot .origin.internal { color: var(--snapshot-green); }
-.runtime-snapshot .origin.external { color: var(--snapshot-brown); }
-.runtime-snapshot .origin.mixed { color: var(--snapshot-blue); }
-.runtime-snapshot tr.external-address td:first-child { border-left: 3px solid var(--snapshot-brown); background: var(--snapshot-brown-light); }
-.runtime-snapshot .restore-notes, .runtime-snapshot .step-details { margin: 10px 0; padding-left: 24px; list-style: disc; }
-.runtime-snapshot .restore-notes > li, .runtime-snapshot .step-details > li { margin: 7px 0; padding: 0; border: 0; }
-.runtime-snapshot .steps .substeps { padding: 14px 20px 14px 42px; border: 1px solid var(--snapshot-blue-line); background: var(--snapshot-blue-light); }
-.runtime-snapshot .refs { max-width: var(--snapshot-prose-width); margin-inline: auto; padding-left: 25px; }
-.runtime-snapshot .refs li { margin-block: 9px; }
-.runtime-snapshot footer { max-width: var(--snapshot-prose-width); margin: 40px auto 0; padding-top: 20px; border-top: 2px solid var(--snapshot-ink); color: var(--snapshot-muted); font-size: max(17px, .95em); }
-
-@container kb-reading (max-width: 760px) {
-  .runtime-snapshot .taskinfo-diagram { padding: 14px; }
-  .runtime-snapshot .taskinfo-part { padding: 12px; }
-  .runtime-snapshot .taskinfo-field-groups { grid-template-columns: 1fr; }
-  .runtime-snapshot { font-size: 17px; }
-  .runtime-snapshot h2 { font-size: 25px; }
-  .runtime-snapshot .runtime-snapshot-toc { gap: 8px 15px; }
-  .runtime-snapshot figure > svg.diagram, .runtime-snapshot figure > img { min-width: 1050px; max-width: none; }
-  .runtime-snapshot figure > svg.diagram { width: 1050px; }
-  .runtime-snapshot :is(th, td) { padding: 10px; }
-  .runtime-snapshot .steps > li { padding-left: 47px; }
-  .runtime-snapshot .steps h3 { font-size: 20px; }
-  .runtime-snapshot .steps .substeps { padding: 12px 12px 12px 34px; }
+.runtime-original.runtime-snapshot pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: var(--blue-light);
+  padding: 18px 22px;
+  margin: 20px 0;
+  line-height: 1.6;
+  border-left: 3px solid var(--blue);
 }
+.runtime-original.runtime-snapshot p {
+  margin: 12px 0;
+}
+.runtime-original.runtime-snapshot h1, .runtime-original.runtime-snapshot h2, .runtime-original.runtime-snapshot h3 {
+  line-height: 1.35;
+  margin: 0 0 20px;
+}
+.runtime-original.runtime-snapshot h1 {
+  font-size: 38px;
+}
+.runtime-original.runtime-snapshot h2 {
+  font-size: 29px;
+}
+.runtime-original.runtime-snapshot h3 {
+  font-size: 23px;
+  margin-top: 28px;
+}
+.runtime-original.runtime-snapshot strong {
+  font-weight: 700;
+}
+.runtime-original.runtime-snapshot main {
+  max-width: 1160px;
+  margin: 38px auto 70px;
+  padding: 42px 54px 60px;
+  background: var(--paper);
+}
+.runtime-original.runtime-snapshot header {
+  padding-bottom: 28px;
+  border-bottom: 2px solid var(--ink);
+}
+.runtime-original.runtime-snapshot .meta {
+  color: var(--muted);
+  font-size: 17px;
+}
+.runtime-original.runtime-snapshot .lead {
+  font-size: 21px;
+  max-width: 960px;
+}
+.runtime-original.runtime-snapshot .document-toc {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  gap: 8px 28px;
+  flex-wrap: wrap;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 14px 54px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.runtime-original.runtime-snapshot .document-toc a {
+  white-space: nowrap;
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+}
+.runtime-original.runtime-snapshot section {
+  padding-top: 40px;
+  margin-top: 14px;
+}
+.runtime-original.runtime-snapshot .section-no {
+  font-size: 23px;
+  color: var(--blue);
+  margin-right: 13px;
+}
+.runtime-original.runtime-snapshot figure {
+  margin: 24px 0 30px;
+}
+.runtime-original.runtime-snapshot .diagram {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.runtime-original.runtime-snapshot .diagram text {
+  font-family: "Times New Roman", "SimSun", serif;
+  fill: var(--ink);
+  text-anchor: middle;
+  font-size: 19px;
+}
+.runtime-original.runtime-snapshot .diagram .heading {
+  font-size: 24px;
+  font-weight: 700;
+}
+.runtime-original.runtime-snapshot .diagram .fn {
+  font-size: 18px;
+}
+.runtime-original.runtime-snapshot .diagram .old {
+  fill: var(--blue-light);
+  stroke: #9bb5c9;
+  stroke-width: 1.3;
+}
+.runtime-original.runtime-snapshot .diagram .new {
+  fill: var(--green-light);
+  stroke: #a0c2ac;
+  stroke-width: 1.3;
+}
+.runtime-original.runtime-snapshot .diagram .arrow {
+  fill: none;
+  stroke: #7c8fa0;
+  stroke-width: 1.5;
+}
+.runtime-original.runtime-snapshot .diagram .phase {
+  font-size: 18px;
+  fill: var(--muted);
+  text-anchor: start;
+}
+.runtime-original.runtime-snapshot .diagram .divider {
+  stroke: var(--line);
+  stroke-dasharray: 5 5;
+}
+.runtime-original.runtime-snapshot .table-wrap {
+  overflow-x: auto;
+  margin: 20px 0;
+}
+.runtime-original.runtime-snapshot table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 17px;
+  line-height: 1.55;
+}
+.runtime-original.runtime-snapshot th {
+  text-align: left;
+  color: var(--blue);
+  background: #f4f7fa;
+  font-weight: 700;
+}
+.runtime-original.runtime-snapshot th, .runtime-original.runtime-snapshot td {
+  padding: 13px 15px;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+.runtime-original.runtime-snapshot td:first-child {
+  min-width: 150px;
+}
+.runtime-original.runtime-snapshot td code {
+  font-size: 17px;
+}
+.runtime-original.runtime-snapshot .key {
+  border-left: 3px solid var(--blue);
+  padding: 4px 0 4px 18px;
+  margin: 20px 0;
+}
+.runtime-original.runtime-snapshot .chain {
+  font-size: 18px;
+  padding: 15px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  line-height: 1.9;
+}
+.runtime-original.runtime-snapshot .chain .sep {
+  color: var(--muted);
+  padding: 0 8px;
+}
+.runtime-original.runtime-snapshot .source {
+  margin: 18px 0;
+  font-size: 17px;
+}
+.runtime-original.runtime-snapshot .source a {
+  margin-right: 20px;
+}
+.runtime-original.runtime-snapshot .steps {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  counter-reset: step;
+}
+.runtime-original.runtime-snapshot .steps > li {
+  position: relative;
+  padding: 15px 0 20px 62px;
+  border-bottom: 1px solid var(--line);
+  counter-increment: step;
+}
+.runtime-original.runtime-snapshot .steps > li:before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 12px;
+  color: var(--blue);
+  font-size: 29px;
+  line-height: 1.4;
+}
+.runtime-original.runtime-snapshot .steps h3 {
+  font-size: 21px;
+  margin: 0 0 7px;
+}
+.runtime-original.runtime-snapshot .steps p {
+  margin: 5px 0;
+}
+.runtime-original.runtime-snapshot .scope {
+  color: var(--green);
+  font-weight: 700;
+  margin-top: 23px;
+}
+.runtime-original.runtime-snapshot .substeps {
+  margin: 15px 0;
+  padding-left: 28px;
+}
+.runtime-original.runtime-snapshot .substeps li {
+  padding: 5px 0;
+}
+.runtime-original.runtime-snapshot .substeps code {
+  font-weight: 700;
+}
+.runtime-original.runtime-snapshot details {
+  margin: 22px 0;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+.runtime-original.runtime-snapshot summary {
+  font-weight: 700;
+  color: var(--blue);
+  cursor: pointer;
+  font-size: 19px;
+}
+.runtime-original.runtime-snapshot .refs {
+  padding-left: 25px;
+}
+.runtime-original.runtime-snapshot .refs li {
+  margin: 9px 0;
+}
+.runtime-original.runtime-snapshot footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 2px solid var(--ink);
+  font-size: 17px;
+  color: var(--muted);
+}
+.runtime-original.runtime-snapshot .restore-table th:first-child {
+  width: 8%;
+}
+.runtime-original.runtime-snapshot .restore-table td:first-child {
+  min-width: 50px;
+  font-size: 21px;
+  color: var(--blue);
+}
+.runtime-original.runtime-snapshot .hint {
+  color: var(--muted);
+}
+.runtime-original.runtime-snapshot .origin {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+.runtime-original.runtime-snapshot .origin.internal {
+  color: var(--green);
+}
+.runtime-original.runtime-snapshot .origin.external {
+  color: #8c541e;
+}
+.runtime-original.runtime-snapshot .origin.mixed {
+  color: var(--blue);
+}
+.runtime-original.runtime-snapshot tr.external-address td:first-child {
+  border-left: 3px solid #b88852;
+  background: #fff8ef;
+}
+.runtime-original.runtime-snapshot td a {
+  overflow-wrap: anywhere;
+}
+.runtime-original.runtime-snapshot .memory-group {
+  margin: 0;
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+}
+.runtime-original.runtime-snapshot .memory-group summary {
+  font-size: 22px;
+}
+.runtime-original.runtime-snapshot .memory-group .group-count {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--muted);
+  margin-left: 20px;
+}
+.runtime-original.runtime-snapshot .memory-group p {
+  margin: 15px 0;
+}
+.runtime-original.runtime-snapshot .memory-group .table-wrap {
+  margin-bottom: 5px;
+}
+.runtime-original.runtime-snapshot figure img, .runtime-original.runtime-snapshot figure svg {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+.runtime-original.runtime-snapshot .restore-notes, .runtime-original.runtime-snapshot .step-details {
+  margin: 10px 0;
+  padding-left: 24px;
+  list-style: disc;
+}
+.runtime-original.runtime-snapshot .restore-notes > li, .runtime-original.runtime-snapshot .step-details > li {
+  margin: 7px 0;
+  padding: 0;
+  border: 0;
+  line-height: 1.7;
+}
+.runtime-original.runtime-snapshot .steps .substeps {
+  border: 1px solid #9bb5c9;
+  background: var(--blue-light);
+  padding: 14px 20px 14px 42px;
+}
+.runtime-original.runtime-snapshot .module-backup-process {
+  border: 1px solid var(--line);
+  padding: 18px 22px;
+  margin: 22px 0;
+}
+.runtime-original.runtime-snapshot .module-backup-process p {
+  margin: 0 0 10px;
+}
+.runtime-original.runtime-snapshot .module-backup-process ol {
+  margin: 0;
+  padding-left: 24px;
+}
+.runtime-original.runtime-snapshot .module-backup-process li {
+  margin: 12px 0;
+}
+@media (max-width: 760px) {
+  .runtime-original.runtime-snapshot {
+    font-size: 17px;
+  }
+  .runtime-original.runtime-snapshot main {
+    padding: 28px 20px;
+    margin: 0 auto;
+  }
+  .runtime-original.runtime-snapshot h1 {
+    font-size: 31px;
+  }
+  .runtime-original.runtime-snapshot h2 {
+    font-size: 25px;
+  }
+  .runtime-original.runtime-snapshot .document-toc {
+    gap: 8px 15px;
+    padding: 12px 20px;
+  }
+  .runtime-original.runtime-snapshot th, .runtime-original.runtime-snapshot td {
+    padding: 10px;
+  }
+  .runtime-original.runtime-snapshot .steps > li {
+    padding-left: 47px;
+  }
+  .runtime-original.runtime-snapshot .steps h3 {
+    font-size: 20px;
+  }
+  .runtime-original.runtime-snapshot .lead {
+    font-size: 19px;
+  }
+}
+.runtime-original.runtime-snapshot .context-map .group-title {
+  font-size: 21px;
+  font-weight: 700;
+}
+.runtime-original.runtime-snapshot .context-map .field {
+  font-size: 18px;
+}
+.runtime-original.runtime-snapshot .context-map .port {
+  fill: #fff;
+  stroke: #7c8fa0;
+  stroke-width: 1.5;
+}
+.runtime-original.runtime-snapshot .context-map .pointer-label {
+  font-size: 18px;
+  fill: var(--muted);
+}
+.runtime-original.runtime-snapshot .context-caption {
+  margin-top: 13px;
+  font-size: 18px;
+}
+@media (max-width: 760px) {
+  .runtime-original.runtime-snapshot .steps .substeps {
+    padding: 12px 12px 12px 34px;
+  }
+}
+.runtime-original.runtime-snapshot .taskinfo-diagram {
+  border: 1px solid #9bb5c9;
+  background: #fbfcfe;
+  padding: 20px;
+}
+.runtime-original.runtime-snapshot .taskinfo-diagram .structure-title {
+  margin: 0 0 14px;
+  text-align: center;
+  font-size: 23px;
+  font-weight: 700;
+}
+.runtime-original.runtime-snapshot .taskinfo-part {
+  border: 1px solid var(--line);
+  background: var(--blue-light);
+  padding: 14px 18px;
+  margin-top: 14px;
+}
+.runtime-original.runtime-snapshot .taskinfo-part > strong {
+  display: block;
+  margin-bottom: 8px;
+}
+.runtime-original.runtime-snapshot .taskinfo-diagram p {
+  margin: 6px 0;
+}
+.runtime-original.runtime-snapshot .taskinfo-field-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.runtime-original.runtime-snapshot .taskinfo-field-group {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: 12px;
+  min-width: 0;
+}
+.runtime-original.runtime-snapshot .taskinfo-field-group > strong {
+  display: block;
+}
+.runtime-original.runtime-snapshot .taskinfo-diagram .source {
+  margin-top: 14px;
+}
+@media (max-width: 760px) {
+  .runtime-original.runtime-snapshot .taskinfo-diagram {
+    padding: 14px;
+  }
+  .runtime-original.runtime-snapshot .taskinfo-part {
+    padding: 12px;
+  }
+  .runtime-original.runtime-snapshot .taskinfo-field-groups {
+    grid-template-columns: 1fr;
+  }
+}
+.runtime-original.runtime-snapshot .taskinfo-supplement > summary {
+  font-size: 19px;
+}
+@media print {
+  .runtime-original.runtime-snapshot {
+    background: #fff;
+  }
+  .runtime-original.runtime-snapshot main {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  .runtime-original.runtime-snapshot .document-toc {
+    display: none;
+  }
+  .runtime-original.runtime-snapshot section {
+    break-before: auto;
+  }
+  .runtime-original.runtime-snapshot figure, .runtime-original.runtime-snapshot table tr, .runtime-original.runtime-snapshot .steps > li {
+    break-inside: avoid;
+  }
+  .runtime-original.runtime-snapshot a {
+    color: inherit;
+  }
+  .runtime-original.runtime-snapshot details {
+    display: block;
+  }
+  .runtime-original.runtime-snapshot details > * {
+    display: block;
+  }
+  .runtime-original.runtime-snapshot footer {
+    margin-top: 25px;
+  }
+}
+.runtime-original.runtime-snapshot {display:flow-root;}
+.runtime-original.runtime-snapshot .document-toc {top:84px;}
+.runtime-original.runtime-snapshot footer {display:block!important;}
+.runtime-original.runtime-snapshot :is(.external-icon,.clipboard-button,a[role="anchor"]) {display:none;}
