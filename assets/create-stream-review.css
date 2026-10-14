@@ -1,0 +1,73 @@
+.page .center:has(> article .runtime-create-stream) > .page-header > .popover-hint,
+.page .center > article:has(.runtime-create-stream) {
+  --stream-font: clamp(17px, calc(15px + .3vw), 21px);
+  --stream-prose: calc(45 * var(--stream-font));
+  width: 100%; max-width: 2200px; margin-inline: auto;
+  font-family: "Times New Roman", "SimSun", serif;
+}
+.page .center:has(> article .runtime-create-stream) .article-title { max-width: var(--stream-prose); margin-inline: auto; }
+.runtime-create-stream {
+  --ink: var(--text); --muted-ink: var(--muted); --blue: var(--accent);
+  --paper: var(--surface-solid); --blue-bg: color-mix(in srgb, var(--blue) 8%, var(--paper));
+  --green-bg: color-mix(in srgb, #316a53 8%, var(--paper));
+  --amber-bg: color-mix(in srgb, #9b6423 8%, var(--paper));
+  min-width: 0; color: var(--ink); font: var(--stream-font)/1.65 "Times New Roman", "SimSun", serif; overflow-wrap: anywhere;
+}
+.runtime-create-stream *, .runtime-create-stream *::before, .runtime-create-stream *::after { box-sizing: border-box; }
+.runtime-create-stream :is(p, li, tbody) { color: inherit; line-height: inherit; }
+.runtime-create-stream a { color: var(--blue); text-underline-offset: 4px; }
+.runtime-create-stream code { padding: 0; background: transparent; border-radius: 0; color: inherit; font: inherit; overflow-wrap: anywhere; }
+.runtime-create-stream > header { max-width: var(--stream-prose); margin-inline: auto; border-bottom: 2px solid var(--ink); padding-bottom: 25px; }
+.runtime-create-stream :is(h2, h3, p) { max-width: var(--stream-prose); margin-inline: auto; }
+.runtime-create-stream :is(h2, h3) { color: var(--ink); font-family: inherit; line-height: 1.4; }
+.runtime-create-stream h2 { font-size: 1.45em; margin-block: 0 13px; }
+.runtime-create-stream h2 span { font-size: .86em; margin-right: 15px; color: var(--blue); }
+.runtime-create-stream h3 { font-size: 1.2em; margin-block: 18px; }
+.runtime-create-stream p { margin-block: 12px; }
+.runtime-create-stream .meta { color: var(--muted-ink); font-size: .95em; }
+.runtime-create-stream .scope { margin-bottom: 5px; }
+.runtime-create-stream .spine { font-weight: 700; color: var(--blue); }
+.runtime-create-stream .lead { margin-block: 0 20px; }
+.runtime-create-stream .create-stream-toc { position: sticky; top: 84px; z-index: 10; display: flex; flex-wrap: nowrap; gap: 24px; max-width: 1600px; margin: 23px auto 0; padding: 14px 0; background: var(--paper); border-bottom: 1px solid var(--line); overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; }
+.runtime-create-stream .create-stream-toc a { flex: 0 0 auto; white-space: nowrap; text-decoration: none; border-bottom: 1px solid var(--line); }
+.runtime-create-stream section { min-width: 0; padding-top: 38px; margin-top: 17px; border-bottom: 1px solid var(--line); padding-bottom: 29px; scroll-margin-top: 84px; }
+.runtime-create-stream figure { min-width: 0; max-width: 1600px; margin: 16px auto 18px; }
+.runtime-create-stream .diagram-wrap { overflow-x: auto; overscroll-behavior-x: contain; padding: 6px 0; }
+.runtime-create-stream .diagram { display: block; width: 100%; max-width: 100%; height: auto; }
+.runtime-create-stream .diagram text { fill: var(--ink); font-family: "Times New Roman", "SimSun", serif; text-anchor: middle; }
+.runtime-create-stream .node-title { font-size: 21px; font-weight: 700; }
+.runtime-create-stream .node-sub { font-size: 19px; }
+.runtime-create-stream .note { font-size: 21px; }
+.runtime-create-stream .edge-label { font-size: 18px; fill: var(--muted-ink); }
+.runtime-create-stream .box { stroke: #a9bdcd; stroke-width: 1.25; }
+.runtime-create-stream .box.blue { fill: var(--blue-bg); }
+.runtime-create-stream .box.plain { fill: var(--surface-muted); stroke: #c5d0d9; }
+.runtime-create-stream .box.green { fill: var(--green-bg); stroke: #a3c4b0; }
+.runtime-create-stream .box.amber { fill: var(--amber-bg); stroke: #d7b789; }
+.runtime-create-stream .edge { stroke: #6b8091; stroke-width: 1.6; fill: none; stroke-linecap: butt; stroke-linejoin: miter; }
+.runtime-create-stream .edge.warn { stroke: #9b6423; }
+.runtime-create-stream figcaption { margin-top: 14px; font-size: .95em; color: var(--muted-ink); }
+.runtime-create-stream details { min-width: 0; max-width: 1600px; margin: 16px auto; }
+.runtime-create-stream summary { max-width: var(--stream-prose); margin-inline: auto; cursor: pointer; font-size: .95em; color: var(--blue); font-weight: 700; }
+.runtime-create-stream .sources ul { max-width: var(--stream-prose); margin: 13px auto 0; padding-left: 23px; font-size: max(17px, .9em); }
+.runtime-create-stream .sources li { margin: 8px 0; overflow-wrap: anywhere; }
+.runtime-create-stream .table-wrap { min-width: 0; max-width: 1600px; overflow-x: auto; margin: 18px auto; overscroll-behavior-x: contain; }
+.runtime-create-stream .table-wrap > .table-container { margin: 0; padding: 0; overflow: visible; }
+.runtime-create-stream table { display: table; width: 100%; max-width: none; border-collapse: collapse; font-size: .95em; margin: 0; padding: 0; overflow: visible; }
+.runtime-create-stream :is(th, td) { padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+.runtime-create-stream th { color: var(--blue); background: var(--surface-muted); }
+.runtime-create-stream thead { font-family: inherit; }
+.runtime-create-stream .binding-table { table-layout: fixed; min-width: 960px; }
+.runtime-create-stream .binding-table th[scope="row"] { background: var(--surface-muted); color: var(--ink); font-weight: 700; }
+.runtime-create-stream .binding-table td, .runtime-create-stream .core-methods td { overflow-wrap: anywhere; }
+.runtime-create-stream .core-methods { table-layout: fixed; min-width: 900px; }
+.runtime-create-stream .recall { margin-top: 28px; padding-top: 8px; border-top: 1px solid var(--line); }
+.runtime-create-stream .recall summary { font-size: 1em; }
+.runtime-create-stream .recall p { padding-left: 19px; }
+.runtime-create-stream .create-stream-footer { max-width: var(--stream-prose); margin: 28px auto 0; color: var(--muted-ink); font-size: .95em; }
+@container kb-reading (max-width: 760px) {
+  .runtime-create-stream { font-size: 17px; }
+  .runtime-create-stream h2 { font-size: 25px; }
+  .runtime-create-stream .diagram { width: 1000px; min-width: 1000px; max-width: none; }
+  .runtime-create-stream :is(th, td) { padding: 9px 10px; }
+}
