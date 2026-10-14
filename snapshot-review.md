@@ -6,7 +6,7 @@ tags:
 ---
 
 <div class="runtime-original runtime-snapshot">
-<link rel="stylesheet" href="/knowledge/runtime/assets/snapshot-review.css?v=750821fa47c3">
+<link rel="stylesheet" href="/knowledge/runtime/assets/snapshot-review.css?v=b4642bb73b0e">
 <nav class="document-toc" aria-label="笔记目录"><a href="#compare" data-no-popover="true" data-router-ignore>01 新老流程</a><a href="#backup" data-no-popover="true" data-router-ignore>02 Host 备份数据来源</a><a href="#restore" data-no-popover="true" data-router-ignore>03 旧恢复流程</a></nav>
 <main>
 <header>
@@ -242,7 +242,7 @@ tags:
 <p><strong>以下控制动作均在 Device 侧执行。</strong></p><div class="table-wrap"><table id="device-control-comparison"><colgroup><col style="width:30%"><col style="width:70%"></colgroup><thead><tr><th>控制动作</th><th>具体作用</th></tr></thead><tbody><tr><td><strong>Notify Record / Wait</strong></td><td>通过 <strong>Notify 通知资源</strong>传递信号，有明确的 Record 通知任务。Record 发出通知后，当前流继续；Wait 等待指定通知，未满足时等待，满足后继续等待流的后续任务。</td></tr><tr><td><strong>内存写值 / 等待值</strong><br><code>MemWrite / MemWaitValue</code></td><td>通过<strong>内存状态值</strong>表达条件。写入者可以是 MemWriteValue 或直接更新该内存的计算任务，例如写入 <code>done = 1</code>；等待者读取 <code>devAddr</code>，条件满足后继续<strong>当前流</strong>的后续任务。<strong>状态值的写入者提供信号，无需专门的 Notify 对象。</strong></td></tr><tr><td><strong>流激活 / 条件切换</strong><br><code>StreamActive / StreamSwitch</code></td><td>Active 激活已存在的目标流，当前流可以继续。此处讨论的 STARS Switch 在条件成立时<strong>激活目标流、停用当前流</strong>；条件不成立时，当前流继续。</td></tr></tbody></table></div>
 </div>
 </details>
-<details class="memory-group"><summary>④ 模型任务更新<span class="group-count">3 项</span></summary><div class="table-wrap"><table><colgroup><col style="width:30%"><col style="width:34%"><col style="width:36%"></colgroup>
+<details class="memory-group"><summary>④ 模型任务更新<span class="group-count">3 项</span></summary><p><strong>这里的 tiling table 保存 key 与 kernel 入口地址的对应关系，tiling key 用来选择目标任务执行哪份算子代码，blockDim 指定启动多少个 block。</strong>前面的 <strong>tiling 数据</strong>交给选中的 kernel，告诉它每核处理多少数据、怎样分块计算。</p><div class="table-wrap"><table><colgroup><col style="width:30%"><col style="width:34%"><col style="width:36%"></colgroup>
 <thead><tr><th>代码变量名称</th><th>主要作用</th><th>内存来源 / 快照标记</th></tr></thead><tbody>
 <tr><td><code>mdlUpdateTask.tilingTabAddr</code></td><td>模型任务更新时查询 kernel 的 tiling 表</td><td><span class="origin internal">Runtime 内部申请</span><a data-src="program" data-line="1910" href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/src/runtime/core/src/kernel/program.cc#L1910" target="_blank" rel="noopener">Program::CopyTilingTabToDev</a> → <code>DevMemAllocWithBackupFlag</code>；返回的 <code>devCopyMem</code> 写入 <code>tilingTabAddr</code>。</td></tr>
 <tr class="external-address"><td>v100：<code>mdlUpdateTask.tilingKeyAddr</code><br>v200_base：<code>mdlUpdateTask.tilingKeyOffset</code></td><td>选择 kernel 时使用的 tiling key 值</td><td><span class="origin external">调用方传入</span><a data-src="mdltask" data-line="136" href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/src/runtime/core/src/task/task_info/model/model_update_task.cc#L136" target="_blank" rel="noopener">ModelTaskUpdateInit</a> 保存 <code>para-&gt;tilingKeyAddr</code>；David 路径将该地址存入 <code>tilingKeyOffset</code>。<br><strong>REQUIRED 补标：</strong><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/task/task_info/model/model_update_task.cc#L138" target="_blank" rel="noopener"><code>ModelTaskUpdateInit</code></a>。</td></tr>
@@ -271,16 +271,16 @@ tags:
 <h3>2.2 ModuleBackup：从 Program 和 Module 中收集地址</h3>
 <p>代码入口为 <code>Runtime::SaveModule()</code>。它遍历 Program allocator 中仍有效的 Program，将 Device 内存信息组织成 <code>ModuleMemInfo</code>，放入 <code>moduleBackupList_</code>。</p>
 <p class="chain"><code>SaveModule</code><span class="sep">→</span><code>SaveModuleDataInfoToList(prog)</code><span class="sep">→</span><code>moduleBackupList_</code><br><code>SaveModelAllDataToHost</code><span class="sep">→</span><code>node.devAddr → node.hostAddr</code></p>
-<div class="table-wrap"><table>
+<p><strong>这些地址属于 Program 或 Module，供使用相应代码或名称的任务共享。</strong>下表按代码变量说明它服务于哪类任务，以及设备执行时怎样使用对应内容。</p><div class="table-wrap"><table id="module-backup-fields">
 <colgroup><col style="width:33%"><col style="width:30%"><col style="width:37%"></colgroup>
-<thead><tr><th>代码变量名称</th><th>主要作用</th><th>Device 地址获取位置</th></tr></thead>
+<thead><tr><th>代码变量名称</th><th>对应任务与具体用途</th><th>Device 地址获取位置</th></tr></thead>
 <tbody>
-<tr><td><code>Program::baseAddrAlign_[devId]</code></td><td>设备上已加载的<strong>算子二进制</strong></td><td><code>prog-&gt;GetBinAlignBaseAddr(devId)</code></td></tr>
-<tr><td><code>Program::soNameDevAddrMap_[devId]</code></td><td>设备上的 <strong>SO 名称字符串</strong></td><td><code>prog-&gt;GetSoNameDevAddrMap(devId)</code></td></tr>
-<tr><td><code>Program::funcNameDevAddrMap_[devId]</code></td><td>设备上的<strong>函数名称字符串</strong></td><td><code>prog-&gt;GetFuncNameDevAddrMap(devId)</code></td></tr>
-<tr><td><code>Module::baseAddrAlign_</code></td><td>当前 Context 的 Module 已加载的<strong>算子二进制</strong></td><td><code>prog-&gt;GetCtxMap()</code> → Context → <code>GetModuleWithoutCreate(prog)</code> → <code>module-&gt;GetBaseAddr()</code></td></tr>
-<tr><td><code>Module::soNamesBaseAddr_</code></td><td>Module 使用的 AICPU <strong>SO 名称字符串</strong></td><td><code>module-&gt;GetAicpuLoadInfo()</code> 输出的 <code>soNameBase</code></td></tr>
-<tr><td><code>Module::kernelNamesBaseAddr_</code></td><td>Module 使用的 AICPU <strong>入口名称字符串</strong></td><td><code>GetAicpuLoadInfo()</code> 输出的 <code>kernelNameBase</code></td></tr>
+<tr><td><code>Program::baseAddrAlign_[devId]</code></td><td><strong>AICORE / AIVEC 等使用该 Program 代码的 kernel 任务。</strong>指向指定 Device 上已加载的算子二进制。任务取得其中的 kernel 入口地址后，由设备执行对应代码。</td><td><code>prog-&gt;GetBinAlignBaseAddr(devId)</code></td></tr>
+<tr><td><code>Program::soNameDevAddrMap_[devId]</code></td><td><strong>AICPU kernel 任务使用的 SO 名称地址缓存。</strong>按共享库名称记录 Device 字符串地址；这些地址供任务引用，设备侧按名称定位并加载所需的 SO。</td><td><code>prog-&gt;GetSoNameDevAddrMap(devId)</code></td></tr>
+<tr><td><code>Program::funcNameDevAddrMap_[devId]</code></td><td><strong>AICPU kernel 任务使用的函数入口名称地址缓存。</strong>按函数名记录 Device 字符串地址；任务引用该名称，在已加载的 SO 中查找函数入口并调用。</td><td><code>prog-&gt;GetFuncNameDevAddrMap(devId)</code></td></tr>
+<tr><td><code>Module::baseAddrAlign_</code></td><td><strong>当前 Context 中使用该 Module 的 kernel 任务。</strong>指向 Module 已加载的算子代码；<code>Module::GetFunction</code> 用加载基址加 kernel 入口偏移取得执行地址。</td><td><code>prog-&gt;GetCtxMap()</code> → Context → <code>GetModuleWithoutCreate(prog)</code> → <code>module-&gt;GetBaseAddr()</code></td></tr>
+<tr><td><code>Module::soNamesBaseAddr_</code></td><td><strong>该 Module 的 AICPU 算子库加载流程。</strong>指向 Device 上保存 SO 名称的缓冲；名称内容来自 <code>Program::GetSoName()</code>，用于标明需要加载哪个共享库，供后续 AICPU 任务使用。</td><td><code>module-&gt;GetAicpuLoadInfo()</code> 输出的 <code>soNameBase</code></td></tr>
+<tr><td><code>Module::kernelNamesBaseAddr_</code></td><td><strong>该 Module 的 AICPU kernel 加载与入口查找流程。</strong>指向 Device 上的 kernel 名称缓冲，内容来自 <code>Program::GetKernelNamesBuffer()</code>；保存该库提供的 kernel 名称，供加载及后续任务查找入口使用。</td><td><code>GetAicpuLoadInfo()</code> 输出的 <code>kernelNameBase</code></td></tr>
 </tbody></table></div>
 <div id="module-name-purpose">
 <p><strong>算子二进制、SO 与 kernel：</strong>二进制表示编译产物，SO 表示共享库形式，kernel 表示具体的执行实现及入口。一个二进制或 SO 可以提供多个 kernel 入口。</p>
@@ -291,26 +291,8 @@ tags:
 <tr><td>kernel</td><td>算子的具体执行实现，具有可启动或调用的入口</td><td>从选定入口执行代码，按 args 提供的数据和配置完成计算</td></tr>
 </tbody></table></div>
 <p class="chain"><strong>AICORE / AIVEC：</strong>加载二进制 → 由加载基址 + kernel 入口偏移取得代码地址 → 启动 kernel<br><strong>AICPU：</strong>加载 SO → 按函数入口名定位 → 调用 kernel</p>
-<p><strong>名称字段：</strong></p>
-<div class="table-wrap"><table><colgroup><col style="width:25%"><col style="width:35%"><col style="width:40%"></colgroup>
-<thead><tr><th>名称</th><th>对应内容</th><th>作用</th></tr></thead><tbody>
-<tr><td><code>soName</code></td><td>共享库名称字符串</td><td><strong>定位并加载</strong>所需的 SO 库</td></tr>
-<tr><td><code>funcName</code></td><td>函数入口名称字符串</td><td>在已加载的 SO 中<strong>查找入口地址</strong>，再调用该函数</td></tr>
-<tr><td><code>kernelName</code></td><td>Runtime 注册 / 查找 kernel 的名称</td><td>AICPU 单独注册路径中同时用作 <code>opType</code>，可与 <code>funcName</code> 不同</td></tr>
-</tbody></table></div>
-<p class="source">源码：<a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/kernel/binary_loader.cc#L489" target="_blank" rel="noopener">ELF 解析与 kernel 注册</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/kernel/binary_loader.cc#L181" target="_blank" rel="noopener">AICPU SO 加载配置</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/kernel/module.cc#L259" target="_blank" rel="noopener">kernel 入口地址计算</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/kernel/program.cc#L913" target="_blank" rel="noopener">AICPU 注册名与函数名</a></p>
+<p class="source">源码：<a href="../src/runtime/core/src/kernel/program.cc">Program 的 AICPU SO / 函数名称地址缓存</a><a href="../src/runtime/core/src/kernel/module.cc">Module 加载代码、名称缓冲与计算入口</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/kernel/binary_loader.cc#L489" target="_blank" rel="noopener">ELF 解析与 kernel 注册</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/kernel/binary_loader.cc#L181" target="_blank" rel="noopener">AICPU SO 加载配置</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/kernel/module.cc#L259" target="_blank" rel="noopener">kernel 入口地址计算</a><a href="https://gitcode.com/cann/runtime/blob/8ed7a689026b87b90d992c8ece0a1d282b2aec62/src/runtime/core/src/kernel/program.cc#L913" target="_blank" rel="noopener">AICPU 注册名与函数名</a></p>
 </div>
-<div class="module-backup-process">
-<p><strong>Host 副本的生成：</strong></p>
-<ol>
-<li><strong>读取 Device 区域信息：</strong>从上表各区域取得 <code>devAddr</code> 和 <code>memSize</code>。原始 Host 加载资料及名称字符串提供加载信息与长度。</li>
-<li><strong>建立备份节点：</strong>创建 <code>ModuleMemInfo</code>，记录 Device 地址、长度及设备信息，同时申请<strong>独立的 Host 缓冲区 <code>hostAddr</code></strong>；将需要备份的节点加入 <code>moduleBackupList_</code>。</li>
-<li><strong>搬运 Device 当前内容：</strong>收集完成后，<code>SaveModelAllDataToHost()</code> 遍历列表，通过 <code>MemCopySync()</code> 执行 <strong><code>node-&gt;devAddr</code> → <code>node-&gt;hostAddr</code></strong> 的 D2H 拷贝。</li>
-</ol>
-</div>
-<details><summary>Module 二进制区域的入表条件</summary>
-<p>将 Module 的地址 <code>devAddr</code> 和长度 <code>memSize</code>，分别与同一 Device 上 Program 的二进制地址和长度比较。<strong>地址不同且长度不同</strong>时，才把该 Module 二进制节点加入备份列表。</p>
-</details>
 <p class="source"><a data-src="runtime" data-symbol="SaveModuleDataInfoToList" href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/src/runtime/core/src/runtime.cc" target="_blank" rel="noopener">Program / Module 地址收集</a><a data-src="runtime" data-symbol="SaveModuleAicpuInfo" href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/src/runtime/core/src/runtime.cc" target="_blank" rel="noopener">AICPU 名称区域</a><a data-src="runtime" data-symbol="SaveModelAllDataToHost" href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/src/runtime/core/src/runtime.cc" target="_blank" rel="noopener">D2H 拷贝</a><a data-src="runtimehpp" data-symbol="ModuleMemInfo" href="https://gitcode.com/cann/runtime/blob/c06e4cccb34ae5c5b616544250718879927da0d7/src/runtime/core/inc/runtime.hpp" target="_blank" rel="noopener">Host 节点结构</a></p>
 </section>
 <section id="restore">

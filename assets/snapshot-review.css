@@ -106,6 +106,8 @@ html:has(.runtime-original.runtime-snapshot) {scroll-padding-top:calc(84px + var
 .runtime-original.runtime-snapshot section {
   padding-top: 40px;
   margin-top: 14px;
+  padding-bottom: 32px;
+  border-bottom: 3px solid var(--ink);
 }
 .runtime-original.runtime-snapshot .section-no {
   font-size: 23px;
