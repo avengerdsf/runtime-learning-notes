@@ -53,6 +53,7 @@
 .runtime-snapshot .runtime-snapshot-toc { position: sticky; top: 84px; z-index: 10; display: flex; flex-wrap: wrap; gap: 8px 28px; max-width: var(--snapshot-prose-width); margin: 0 auto 14px; padding: 14px 0; background: var(--snapshot-surface); border-bottom: 1px solid var(--snapshot-line); }
 .runtime-snapshot .runtime-snapshot-toc a { max-width: 100%; }
 .runtime-snapshot section { min-width: 0; padding-top: 40px; margin-top: 14px; scroll-margin-top: 84px; }
+.runtime-snapshot #snapshot-advise { scroll-margin-top: 128px; }
 .runtime-snapshot section > ul { max-width: var(--snapshot-prose-width); margin-inline: auto; padding-left: 24px; }
 .runtime-snapshot .section-no { margin-right: 13px; color: var(--snapshot-blue); font-size: .8em; }
 .runtime-snapshot figure { min-width: 0; max-width: 1600px; margin: 24px auto 30px; overflow-x: auto; overscroll-behavior-x: contain; }
