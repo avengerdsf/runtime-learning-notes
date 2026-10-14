@@ -239,8 +239,7 @@ tags:
 <tr><td><code>value</code></td><td>比较用的目标值，记录在 <code>TaskInfo.u.memWaitValueTask.value</code> 中</td><td>作为等待条件的比较依据；例如目标值为 <code>1</code></td></tr>
 <tr><td><code>flag</code></td><td>比较规则，记录在 <code>TaskInfo.u.memWaitValueTask.flag</code> 中</td><td><code>0</code> 表示当前值大于等于目标值，<code>1</code> 表示相等；还支持按位 AND、NOR 条件</td></tr>
 </tbody></table></div>
-<p><strong>软件 Event 等待示例：</strong>前述等待程序（<code>funcCallSvmMem2</code>）检查 <code>devAddr</code> 指向的 Event 状态值。此时 <code>devAddr = eventAddr</code>、<code>value = 1</code>、<code>flag = 0</code>，等待条件为 <code>*eventAddr &gt;= 1</code>。当前状态值为 <code>0</code> 时继续等待；另一条流执行 Record 任务向同一地址写入 <code>1</code> 后，条件满足，等待流继续执行后续任务。<strong>前两项备份分别保存等待程序的指令字节和状态内存的当前内容。</strong></p>
-<p><strong>目标值与比较规则：</strong><code>value</code> 和 <code>flag</code> 参与生成等待程序，目标常量和比较操作体现在指令中。</p>
+<p><strong>以下控制动作均在 Device 侧执行。</strong></p><div class="table-wrap"><table id="device-control-comparison"><colgroup><col style="width:30%"><col style="width:70%"></colgroup><thead><tr><th>控制动作</th><th>具体作用</th></tr></thead><tbody><tr><td><strong>Notify Record / Wait</strong></td><td>通过 <strong>Notify 通知资源</strong>传递信号，有明确的 Record 通知任务。Record 发出通知后，当前流继续；Wait 等待指定通知，未满足时等待，满足后继续等待流的后续任务。</td></tr><tr><td><strong>内存写值 / 等待值</strong><br><code>MemWrite / MemWaitValue</code></td><td>通过<strong>内存状态值</strong>表达条件。写入者可以是 MemWriteValue 或直接更新该内存的计算任务，例如写入 <code>done = 1</code>；等待者读取 <code>devAddr</code>，条件满足后继续<strong>当前流</strong>的后续任务。<strong>状态值的写入者提供信号，无需专门的 Notify 对象。</strong></td></tr><tr><td><strong>流激活 / 条件切换</strong><br><code>StreamActive / StreamSwitch</code></td><td>Active 激活已存在的目标流，当前流可以继续。此处讨论的 STARS Switch 在条件成立时<strong>激活目标流、停用当前流</strong>；条件不成立时，当前流继续。</td></tr></tbody></table></div>
 </div>
 </details>
 <details class="memory-group"><summary>④ 模型任务更新<span class="group-count">3 项</span></summary><div class="table-wrap"><table><colgroup><col style="width:30%"><col style="width:34%"><col style="width:36%"></colgroup>
