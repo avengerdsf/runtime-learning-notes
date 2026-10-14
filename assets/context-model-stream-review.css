@@ -1,0 +1,539 @@
+.page .center > article:has(.runtime-original.runtime-context-model-stream) {width:100%;max-width:none;margin:0;padding:0;border:0;border-radius:0;background:transparent;container:none;overflow-wrap:normal;}
+.page .center:has(> article .runtime-original.runtime-context-model-stream) > .page-header > .popover-hint {display:none;}
+html:has(.runtime-original.runtime-context-model-stream) {scroll-padding-top:calc(84px + var(--kb-document-toc-height,120px) + 16px);}
+.runtime-original.runtime-context-model-stream {all:revert;display:flow-root;}
+.runtime-original.runtime-context-model-stream :where(*):not(:where(svg,svg *)) {all:revert;}
+.runtime-original.runtime-context-model-stream {
+  --ink:#243545;
+  --muted:#52697b;
+  --blue:#245c89;
+  --line:#d7e0e7;
+  --paper:#fff;
+  --bg:#f4f6f8;
+  --blue-bg:#edf4fa;
+  --green-bg:#edf6f0;
+  --amber-bg:#fff5e5;
+}
+.runtime-original.runtime-context-model-stream * {
+  box-sizing: border-box;
+}
+.runtime-original.runtime-context-model-stream {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--toc-height, 120px) + 16px);
+}
+.runtime-original.runtime-context-model-stream {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Times New Roman", "SimSun", serif;
+  font-size: 19px;
+  line-height: 1.65;
+}
+.runtime-original.runtime-context-model-stream main {
+  max-width: 1180px;
+  margin: 32px auto 56px;
+  padding: 45px 50px;
+  background: var(--paper);
+}
+.runtime-original.runtime-context-model-stream header {
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 25px;
+}
+.runtime-original.runtime-context-model-stream h1 {
+  font-size: 40px;
+  line-height: 1.3;
+  margin: 0 0 18px;
+}
+.runtime-original.runtime-context-model-stream h2 {
+  font-size: 29px;
+  line-height: 1.4;
+  margin: 0 0 13px;
+}
+.runtime-original.runtime-context-model-stream h2 span {
+  font-size: 25px;
+  margin-right: 15px;
+  color: var(--blue);
+}
+.runtime-original.runtime-context-model-stream h3 {
+  font-size: 23px;
+  margin: 18px 0;
+}
+.runtime-original.runtime-context-model-stream p {
+  margin: 12px 0;
+}
+.runtime-original.runtime-context-model-stream .meta {
+  color: var(--muted);
+  font-size: 18px;
+}
+.runtime-original.runtime-context-model-stream .scope {
+  margin-bottom: 5px;
+}
+.runtime-original.runtime-context-model-stream .document-toc {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  margin: 23px 0 0;
+  padding: 12px 0;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.runtime-original.runtime-context-model-stream .toc-chapters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.runtime-original.runtime-context-model-stream .toc-related {
+  display: flex;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.runtime-original.runtime-context-model-stream .document-toc a {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  line-height: 1.5;
+  white-space: nowrap;
+  text-decoration: none;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.runtime-original.runtime-context-model-stream .document-toc a:hover, .runtime-original.runtime-context-model-stream .document-toc a:focus-visible {
+  background: #eef5fa;
+  border-color: var(--blue);
+}
+.runtime-original.runtime-context-model-stream a {
+  color: var(--blue);
+  text-underline-offset: 4px;
+}
+.runtime-original.runtime-context-model-stream code {
+  font: inherit;
+  overflow-wrap: anywhere;
+}
+.runtime-original.runtime-context-model-stream section {
+  padding-top: 38px;
+  margin-top: 17px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 29px;
+}
+.runtime-original.runtime-context-model-stream .lead {
+  margin: 0 0 20px;
+}
+.runtime-original.runtime-context-model-stream figure {
+  margin: 16px 0 18px;
+}
+.runtime-original.runtime-context-model-stream .diagram-wrap {
+  overflow-x: auto;
+  padding: 6px 0;
+}
+.runtime-original.runtime-context-model-stream .diagram {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+.runtime-original.runtime-context-model-stream .diagram text {
+  font-family: "Times New Roman", "SimSun", serif;
+  fill: var(--ink);
+  text-anchor: middle;
+}
+.runtime-original.runtime-context-model-stream .node-title {
+  font-size: 21px;
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream .node-sub {
+  font-size: 19px;
+}
+.runtime-original.runtime-context-model-stream .note {
+  font-size: 21px;
+}
+.runtime-original.runtime-context-model-stream .edge-label {
+  font-size: 18px;
+  fill: var(--muted);
+}
+.runtime-original.runtime-context-model-stream .box {
+  stroke: #a9bdcd;
+  stroke-width: 1.25;
+}
+.runtime-original.runtime-context-model-stream .box.blue {
+  fill: var(--blue-bg);
+}
+.runtime-original.runtime-context-model-stream .box.plain {
+  fill: #f8fafc;
+  stroke: #c5d0d9;
+}
+.runtime-original.runtime-context-model-stream .box.green {
+  fill: var(--green-bg);
+  stroke: #a3c4b0;
+}
+.runtime-original.runtime-context-model-stream .box.amber {
+  fill: var(--amber-bg);
+  stroke: #d7b789;
+}
+.runtime-original.runtime-context-model-stream .edge {
+  stroke: #6b8091;
+  stroke-width: 1.6;
+  fill: none;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+.runtime-original.runtime-context-model-stream .edge.warn {
+  stroke: #9b6423;
+}
+.runtime-original.runtime-context-model-stream figcaption {
+  margin-top: 14px;
+  font-size: 18px;
+  color: var(--muted);
+}
+.runtime-original.runtime-context-model-stream details {
+  margin: 16px 0;
+}
+.runtime-original.runtime-context-model-stream summary {
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--blue);
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream .sources ul {
+  padding-left: 23px;
+  margin: 13px 0 0;
+  font-size: 17px;
+}
+.runtime-original.runtime-context-model-stream .sources li {
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+}
+.runtime-original.runtime-context-model-stream .table-wrap {
+  overflow-x: auto;
+  margin: 18px 0;
+}
+.runtime-original.runtime-context-model-stream table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 18px;
+}
+.runtime-original.runtime-context-model-stream th, .runtime-original.runtime-context-model-stream td {
+  padding: 11px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.runtime-original.runtime-context-model-stream th {
+  color: var(--blue);
+  background: #f8fafc;
+}
+.runtime-original.runtime-context-model-stream .recall {
+  margin-top: 28px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+.runtime-original.runtime-context-model-stream .recall summary {
+  font-size: 19px;
+}
+.runtime-original.runtime-context-model-stream .recall p {
+  padding-left: 19px;
+}
+.runtime-original.runtime-context-model-stream footer {
+  margin-top: 28px;
+  color: var(--muted);
+  font-size: 18px;
+}
+.runtime-original.runtime-context-model-stream .spine {
+  font-weight: 700;
+  color: var(--blue);
+}
+@media (max-width: 800px) {
+  .runtime-original.runtime-context-model-stream main {
+    margin: 0;
+    padding: 30px 20px;
+  }
+  .runtime-original.runtime-context-model-stream h1 {
+    font-size: 31px;
+  }
+  .runtime-original.runtime-context-model-stream h2 {
+    font-size: 25px;
+  }
+  .runtime-original.runtime-context-model-stream {
+    font-size: 18px;
+  }
+  .runtime-original.runtime-context-model-stream .diagram {
+    min-width: 0;
+  }
+  .runtime-original.runtime-context-model-stream .document-toc {
+    gap: 9px 20px;
+  }
+  .runtime-original.runtime-context-model-stream th, .runtime-original.runtime-context-model-stream td {
+    padding: 9px 10px;
+  }
+  .runtime-original.runtime-context-model-stream .sources ul {
+    font-size: 17px;
+  }
+}
+@media print {
+  .runtime-original.runtime-context-model-stream {
+    background: #fff;
+  }
+  .runtime-original.runtime-context-model-stream main {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  .runtime-original.runtime-context-model-stream .document-toc {
+    display: none;
+  }
+  .runtime-original.runtime-context-model-stream section {
+    break-inside: avoid;
+    break-before: auto;
+  }
+  .runtime-original.runtime-context-model-stream .diagram-wrap {
+    overflow: visible;
+  }
+  .runtime-original.runtime-context-model-stream .diagram {
+    min-width: 0;
+  }
+  .runtime-original.runtime-context-model-stream .sources {
+    display: none;
+  }
+  .runtime-original.runtime-context-model-stream .recall {
+    display: none;
+  }
+  .runtime-original.runtime-context-model-stream a {
+    color: inherit;
+  }
+  .runtime-original.runtime-context-model-stream figure {
+    break-inside: avoid;
+  }
+  .runtime-original.runtime-context-model-stream h1 {
+    font-size: 28px;
+  }
+  .runtime-original.runtime-context-model-stream h2 {
+    font-size: 23px;
+  }
+  .runtime-original.runtime-context-model-stream {
+    font-size: 16px;
+  }
+}
+.runtime-original.runtime-context-model-stream .binding-table {
+  table-layout: fixed;
+  min-width: 960px;
+}
+.runtime-original.runtime-context-model-stream .binding-table th[scope=row] {
+  background: #f8fafc;
+  color: var(--ink);
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream .binding-table td {
+  overflow-wrap: anywhere;
+}
+.runtime-original.runtime-context-model-stream .binding-table thead th {
+  vertical-align: top;
+}
+.runtime-original.runtime-context-model-stream .binding-table td strong {
+  font-weight: 700;
+}
+@media print {
+  .runtime-original.runtime-context-model-stream .binding-table {
+    min-width: 0;
+    font-size: 15px;
+  }
+}
+.runtime-original.runtime-context-model-stream .core-methods {
+  table-layout: fixed;
+}
+.runtime-original.runtime-context-model-stream .core-methods td {
+  overflow-wrap: anywhere;
+}
+.runtime-original.runtime-context-model-stream .context-scope {
+  fill: #fbfcfd;
+  stroke: #8fa7ba;
+  stroke-width: 1.8;
+}
+.runtime-original.runtime-context-model-stream .diagram .organization {
+  stroke: var(--blue);
+  stroke-dasharray: 6 4;
+}
+.runtime-original.runtime-context-model-stream .stream-band {
+  fill: #f8fafc;
+  stroke: #c5d0d9;
+  stroke-width: 1.3;
+}
+.runtime-original.runtime-context-model-stream .diagram .stream-label {
+  text-anchor: start;
+  font-size: 21px;
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream .diagram .stream-role {
+  text-anchor: start;
+  font-size: 17px;
+}
+.runtime-original.runtime-context-model-stream .diagram .task-control-line {
+  stroke: #9b6423;
+}
+.runtime-original.runtime-context-model-stream .task-tile {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  border: 1.4px solid #a9bdcd;
+  border-radius: 3px;
+  background: var(--blue-bg);
+  color: var(--ink);
+  font-family: "Times New Roman", "SimSun", serif;
+  font-size: 17px;
+  line-height: 1.25;
+  padding: 6px;
+  cursor: pointer;
+}
+.runtime-original.runtime-context-model-stream .task-name {
+  font-size: 19px;
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream .task-model {
+  background: var(--green-bg);
+  border-color: #a3c4b0;
+}
+.runtime-original.runtime-context-model-stream .task-switch, .runtime-original.runtime-context-model-stream .task-active, .runtime-original.runtime-context-model-stream .task-index {
+  background: var(--amber-bg);
+  border-color: #d7b789;
+}
+.runtime-original.runtime-context-model-stream .task-tile:hover {
+  border-color: var(--blue);
+  background: #e3eef8;
+}
+.runtime-original.runtime-context-model-stream .task-tile:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: -4px;
+}
+.runtime-original.runtime-context-model-stream .task-modal {
+  width: min(960px, 100vw - 32px);
+  max-height: 90vh;
+  padding: 26px;
+  border: 1px solid #8fa7ba;
+  border-radius: 5px;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: "Times New Roman", "SimSun", serif;
+  font-size: 19px;
+  line-height: 1.6;
+  overflow: auto;
+}
+.runtime-original.runtime-context-model-stream .task-modal::backdrop {
+  background: rgba(22, 38, 54, 0.45);
+}
+.runtime-original.runtime-context-model-stream .task-modal-top {
+  display: flex;
+  align-items: start;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+.runtime-original.runtime-context-model-stream .task-modal-top h2 {
+  flex: 1;
+  margin: 0;
+  font-size: 27px;
+}
+.runtime-original.runtime-context-model-stream .task-close {
+  font: inherit;
+  color: var(--blue);
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 5px 14px;
+  cursor: pointer;
+}
+.runtime-original.runtime-context-model-stream .task-host {
+  border: 1.5px solid #a9bdcd;
+  border-radius: 4px;
+  padding: 18px;
+  background: var(--blue-bg);
+}
+.runtime-original.runtime-context-model-stream .task-structure-heading {
+  font-size: 23px;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+.runtime-original.runtime-context-model-stream .task-subheading {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 16px 0 9px;
+}
+.runtime-original.runtime-context-model-stream .task-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.runtime-original.runtime-context-model-stream .task-field {
+  padding: 9px 12px;
+  background: #fff;
+  border: 1px solid #d5dee7;
+  border-radius: 3px;
+  overflow-wrap: anywhere;
+}
+.runtime-original.runtime-context-model-stream .task-field code {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+.runtime-original.runtime-context-model-stream .task-field span {
+  display: block;
+}
+.runtime-original.runtime-context-model-stream .task-memory {
+  padding: 16px 18px;
+  background: var(--green-bg);
+  border: 1px solid #a3c4b0;
+  border-radius: 4px;
+}
+.runtime-original.runtime-context-model-stream .task-pointer {
+  margin: 0;
+  text-align: center;
+  padding: 10px 0;
+  color: var(--blue);
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream .task-pointer svg {
+  display: block;
+  width: 24px;
+  height: 34px;
+  margin: 0 auto;
+}
+.runtime-original.runtime-context-model-stream .task-memory p {
+  margin: 5px 0;
+}
+.runtime-original.runtime-context-model-stream .task-snapshot {
+  margin-top: 13px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.runtime-original.runtime-context-model-stream .task-source {
+  margin-top: 12px;
+  font-size: 17px;
+}
+@media (max-width: 640px) {
+  .runtime-original.runtime-context-model-stream .task-modal {
+    padding: 18px;
+  }
+  .runtime-original.runtime-context-model-stream .task-modal-top h2 {
+    font-size: 24px;
+  }
+  .runtime-original.runtime-context-model-stream .task-fields {
+    grid-template-columns: 1fr;
+  }
+}
+@media print {
+  .runtime-original.runtime-context-model-stream .task-modal {
+    display: none;
+  }
+}
+.runtime-original.runtime-context-model-stream .task-modal-top {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--paper);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.runtime-original.runtime-context-model-stream {display:flow-root;}
+.runtime-original.runtime-context-model-stream .document-toc {top:84px;}
+.runtime-original.runtime-context-model-stream footer {display:block!important;}
+.runtime-original.runtime-context-model-stream :is(.external-icon,.clipboard-button,a[role="anchor"]) {display:none;}
