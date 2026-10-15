@@ -295,15 +295,11 @@ html:has(.runtime-original.runtime-snapshot) {scroll-padding-top:calc(84px + var
 .runtime-original.runtime-snapshot .origin.internal {
   color: var(--green);
 }
-.runtime-original.runtime-snapshot .origin.external {
+.runtime-original.runtime-snapshot .origin.boundary {
   color: #8c541e;
 }
 .runtime-original.runtime-snapshot .origin.mixed {
   color: var(--blue);
-}
-.runtime-original.runtime-snapshot tr.external-address td:first-child {
-  border-left: 3px solid #b88852;
-  background: #fff8ef;
 }
 .runtime-original.runtime-snapshot td a {
   overflow-wrap: anywhere;
