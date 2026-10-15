@@ -533,6 +533,254 @@ html:has(.runtime-original.runtime-context-model-stream) {scroll-padding-top:cal
   padding-bottom: 10px;
   border-bottom: 1px solid var(--line);
 }
+.runtime-original.runtime-context-model-stream #flow-task-strips text {
+  font-family: "Times New Roman", "SimSun", serif;
+  fill: #243545;
+  text-anchor: middle;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .node-title {
+  font-size: 21px;
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .note {
+  font-size: 20px;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .edge-label {
+  font-size: 18px;
+  fill: #52697b;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .stream-label {
+  text-anchor: start;
+  font-size: 21px;
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .stream-role {
+  text-anchor: start;
+  font-size: 17px;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .context-scope {
+  fill: #fbfcfd;
+  stroke: #8fa7ba;
+  stroke-width: 1.8;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .model-scope {
+  fill: #f3f8fc;
+  stroke: #245c89;
+  stroke-width: 1.8;
+  stroke-dasharray: 8 5;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .stream-band {
+  fill: #f8fafc;
+  stroke: #c5d0d9;
+  stroke-width: 1.3;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .edge {
+  stroke: #6b8091;
+  stroke-width: 1.6;
+  fill: none;
+  stroke-linejoin: miter;
+  stroke-linecap: butt;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .task-control-line {
+  stroke: #9b6423;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .task-node {
+  cursor: pointer;
+  outline: none;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .task-body {
+  fill: #edf4fa;
+  stroke: #a9bdcd;
+  stroke-width: 1.4;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .task-model .task-body {
+  fill: #edf6f0;
+  stroke: #a3c4b0;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .task-switch .task-body, .runtime-original.runtime-context-model-stream #flow-task-strips .task-active .task-body, .runtime-original.runtime-context-model-stream #flow-task-strips .task-index .task-body {
+  fill: #fff5e5;
+  stroke: #d7b789;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .task-node:hover .task-body, .runtime-original.runtime-context-model-stream #flow-task-strips .task-node:focus .task-body {
+  stroke: #245c89;
+  stroke-width: 2.4;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .task-title {
+  font-size: 19px;
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream #flow-task-strips .task-label {
+  font-size: 17px;
+}
+.runtime-original.runtime-context-model-stream #operator-binary-structure text {
+  font-family: "Times New Roman", "SimSun", serif;
+  fill: #243545;
+  text-anchor: middle;
+}
+.runtime-original.runtime-context-model-stream #operator-binary-structure .title {
+  font-size: 29px;
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream #operator-binary-structure .name {
+  font-size: 26px;
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream #operator-binary-structure .tag {
+  font-size: 20px;
+  fill: #52697b;
+}
+.runtime-original.runtime-context-model-stream #operator-binary-structure .purpose {
+  font-size: 22px;
+}
+.runtime-original.runtime-context-model-stream #operator-binary-structure .note {
+  font-size: 20px;
+}
+.runtime-original.runtime-context-model-stream #operator-binary-structure .scope {
+  fill: #fbfcfd;
+  stroke: #8fa7ba;
+  stroke-width: 1.8;
+}
+.runtime-original.runtime-context-model-stream #operator-binary-structure .part {
+  fill: #edf4fa;
+  stroke: #a9bdcd;
+  stroke-width: 1.5;
+}
+.runtime-original.runtime-context-model-stream #operator-binary-structure .green {
+  fill: #edf6f0;
+  stroke: #a3c4b0;
+}
+.runtime-original.runtime-context-model-stream #operator-binary-structure .amber {
+  fill: #fff5e5;
+  stroke: #d7b789;
+}
+.runtime-original.runtime-context-model-stream #operator-binary-structure .plain {
+  fill: #fff;
+  stroke: #c5d0d9;
+}
+.runtime-original.runtime-context-model-stream #operator-binary-structure .elf-region {
+  cursor: pointer;
+  outline: none;
+}
+.runtime-original.runtime-context-model-stream #operator-binary-structure .elf-region:hover .part, .runtime-original.runtime-context-model-stream #operator-binary-structure .elf-region:focus .part {
+  stroke: #245c89;
+  stroke-width: 2.6;
+}
+.runtime-original.runtime-context-model-stream #operator-binary-structure .edge {
+  fill: none;
+  stroke: #6b8091;
+  stroke-width: 1.8;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+.runtime-original.runtime-context-model-stream #operator-structure text {
+  font-family: "Times New Roman", "SimSun", serif;
+  fill: #243545;
+  text-anchor: middle;
+}
+.runtime-original.runtime-context-model-stream #operator-structure .title {
+  font-size: 29px;
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream #operator-structure .group-title {
+  font-size: 25px;
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream #operator-structure .name {
+  font-size: 24px;
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream #operator-structure .label {
+  font-size: 21px;
+}
+.runtime-original.runtime-context-model-stream #operator-structure .small {
+  font-size: 18px;
+}
+.runtime-original.runtime-context-model-stream #operator-structure .edge-label {
+  font-size: 20px;
+  fill: #52697b;
+}
+.runtime-original.runtime-context-model-stream #operator-structure .box {
+  fill: #edf4fa;
+  stroke: #a9bdcd;
+  stroke-width: 1.5;
+}
+.runtime-original.runtime-context-model-stream #operator-structure .green {
+  fill: #edf6f0;
+  stroke: #a3c4b0;
+}
+.runtime-original.runtime-context-model-stream #operator-structure .plain {
+  fill: #fff;
+  stroke: #c5d0d9;
+}
+.runtime-original.runtime-context-model-stream #operator-structure .edge {
+  fill: none;
+  stroke: #6b8091;
+  stroke-width: 1.8;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+.runtime-original.runtime-context-model-stream #sqe-structure text {
+  font-family: "Times New Roman", "SimSun", serif;
+  fill: #243545;
+  text-anchor: middle;
+}
+.runtime-original.runtime-context-model-stream #sqe-structure .title {
+  font-size: 26px;
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream #sqe-structure .name {
+  font-size: 22px;
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream #sqe-structure .label {
+  font-size: 19px;
+}
+.runtime-original.runtime-context-model-stream #sqe-structure .offset {
+  font-size: 19px;
+  fill: #52697b;
+}
+.runtime-original.runtime-context-model-stream #sqe-structure .box {
+  stroke: #a9bdcd;
+  stroke-width: 1.4;
+  fill: #f8fafc;
+}
+.runtime-original.runtime-context-model-stream #sqe-structure .blue {
+  fill: #edf4fa;
+}
+.runtime-original.runtime-context-model-stream #sqe-structure .green {
+  fill: #edf6f0;
+  stroke: #a3c4b0;
+}
+.runtime-original.runtime-context-model-stream #sqe-structure .edge {
+  stroke: #6b8091;
+  stroke-width: 1.8;
+  fill: none;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+.runtime-original.runtime-context-model-stream #sqe-structure .region-name {
+  font-size: 26px;
+  font-weight: 700;
+}
+.runtime-original.runtime-context-model-stream #sqe-structure .region-purpose {
+  font-size: 22px;
+}
+.runtime-original.runtime-context-model-stream #sqe-structure .region-range {
+  font-size: 20px;
+  fill: #52697b;
+}
+.runtime-original.runtime-context-model-stream #sqe-structure .sqe-region {
+  cursor: pointer;
+  outline: none;
+}
+.runtime-original.runtime-context-model-stream #sqe-structure .sqe-region:hover .box, .runtime-original.runtime-context-model-stream #sqe-structure .sqe-region:focus .box {
+  stroke: #245c89;
+  stroke-width: 2.6;
+}
+.runtime-original.runtime-context-model-stream #sqe-structure .amber {
+  fill: #fff5e5;
+  stroke: #d7b789;
+}
 .runtime-original.runtime-context-model-stream {display:flow-root;}
 .runtime-original.runtime-context-model-stream .document-toc {top:84px;}
 .runtime-original.runtime-context-model-stream footer {display:block!important;}
