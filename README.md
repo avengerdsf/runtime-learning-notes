@@ -13,4 +13,10 @@ CANN Runtime 学习与复盘。
 
 - [Context、Model、Stream 结构梳理](context-model-stream-review.md)：对象归属、创建绑定、模型执行与资源清理。
 
+- [createContext 复盘学习图解](create-context-review.md)
+
+- [createModel 复盘学习图解](create-model-review.md)
+
+- [kernelLaunch 复盘学习图解](kernel-launch-review.md)
+
 [在个人知识库中阅读](https://avengerdsf.github.io/knowledge/runtime/)
