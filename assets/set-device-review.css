@@ -1,0 +1,645 @@
+.page .center > article:has(.runtime-original.runtime-set-device) {width:100%;max-width:none;margin:0;padding:0;border:0;border-radius:0;background:transparent;container:none;overflow-wrap:normal;}
+.page .center:has(> article .runtime-original.runtime-set-device) > .page-header > .popover-hint {display:none;}
+html:has(.runtime-original.runtime-set-device) {scroll-padding-top:calc(84px + var(--kb-document-toc-height,120px) + 16px);}
+.runtime-original.runtime-set-device {all:revert;display:flow-root;}
+.runtime-original.runtime-set-device :where(*):not(:where(svg,svg *)) {all:revert;}
+.runtime-original.runtime-set-device {
+  --ink:#243545;
+  --muted:#52697b;
+  --blue:#245c89;
+  --line:#d7e0e7;
+  --paper:#fff;
+  --bg:#f4f6f8;
+  --blue-bg:#edf4fa;
+  --green-bg:#edf6f0;
+  --amber-bg:#fff5e5;
+}
+.runtime-original.runtime-set-device * {
+  box-sizing: border-box;
+}
+.runtime-original.runtime-set-device {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--toc-height, 120px) + 16px);
+}
+.runtime-original.runtime-set-device {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Times New Roman", "SimSun", serif;
+  font-size: 19px;
+  line-height: 1.65;
+}
+.runtime-original.runtime-set-device main {
+  max-width: 1180px;
+  margin: 32px auto 56px;
+  padding: 45px 50px;
+  background: var(--paper);
+}
+.runtime-original.runtime-set-device header {
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 25px;
+}
+.runtime-original.runtime-set-device h1 {
+  font-size: 40px;
+  line-height: 1.3;
+  margin: 0 0 18px;
+}
+.runtime-original.runtime-set-device h2 {
+  font-size: 29px;
+  line-height: 1.4;
+  margin: 0 0 13px;
+}
+.runtime-original.runtime-set-device h2 span {
+  font-size: 25px;
+  margin-right: 15px;
+  color: var(--blue);
+}
+.runtime-original.runtime-set-device h3 {
+  font-size: 23px;
+  margin: 18px 0;
+}
+.runtime-original.runtime-set-device p {
+  margin: 12px 0;
+}
+.runtime-original.runtime-set-device .meta {
+  color: var(--muted);
+  font-size: 18px;
+}
+.runtime-original.runtime-set-device .scope {
+  margin-bottom: 5px;
+}
+.runtime-original.runtime-set-device .document-toc {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 27px;
+  margin: 23px 0 0;
+  padding: 14px 0;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.runtime-original.runtime-set-device .document-toc a {
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+}
+.runtime-original.runtime-set-device a {
+  color: var(--blue);
+  text-underline-offset: 4px;
+}
+.runtime-original.runtime-set-device code {
+  font: inherit;
+  overflow-wrap: anywhere;
+}
+.runtime-original.runtime-set-device section {
+  padding-top: 38px;
+  margin-top: 17px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 29px;
+}
+.runtime-original.runtime-set-device .lead {
+  margin: 0 0 20px;
+}
+.runtime-original.runtime-set-device figure {
+  margin: 16px 0 18px;
+}
+.runtime-original.runtime-set-device .diagram-wrap {
+  overflow-x: auto;
+  padding: 6px 0;
+}
+.runtime-original.runtime-set-device .diagram {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+.runtime-original.runtime-set-device .diagram text {
+  font-family: "Times New Roman", "SimSun", serif;
+  fill: var(--ink);
+  text-anchor: middle;
+}
+.runtime-original.runtime-set-device .node-title {
+  font-size: 21px;
+  font-weight: 700;
+}
+.runtime-original.runtime-set-device .node-sub {
+  font-size: 19px;
+}
+.runtime-original.runtime-set-device .note {
+  font-size: 21px;
+}
+.runtime-original.runtime-set-device .edge-label {
+  font-size: 18px;
+  fill: var(--muted);
+}
+.runtime-original.runtime-set-device .box {
+  stroke: #a9bdcd;
+  stroke-width: 1.25;
+}
+.runtime-original.runtime-set-device .box.blue {
+  fill: var(--blue-bg);
+}
+.runtime-original.runtime-set-device .box.plain {
+  fill: #f8fafc;
+  stroke: #c5d0d9;
+}
+.runtime-original.runtime-set-device .box.green {
+  fill: var(--green-bg);
+  stroke: #a3c4b0;
+}
+.runtime-original.runtime-set-device .box.amber {
+  fill: var(--amber-bg);
+  stroke: #d7b789;
+}
+.runtime-original.runtime-set-device .edge {
+  stroke: #6b8091;
+  stroke-width: 1.6;
+  fill: none;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+.runtime-original.runtime-set-device .edge.warn {
+  stroke: #9b6423;
+}
+.runtime-original.runtime-set-device figcaption {
+  margin-top: 14px;
+  font-size: 18px;
+  color: var(--muted);
+}
+.runtime-original.runtime-set-device details {
+  margin: 16px 0;
+}
+.runtime-original.runtime-set-device summary {
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--blue);
+  font-weight: 700;
+}
+.runtime-original.runtime-set-device .sources ul {
+  padding-left: 23px;
+  margin: 13px 0 0;
+  font-size: 17px;
+}
+.runtime-original.runtime-set-device .sources li {
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+}
+.runtime-original.runtime-set-device .table-wrap {
+  overflow-x: auto;
+  margin: 18px 0;
+}
+.runtime-original.runtime-set-device table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 18px;
+}
+.runtime-original.runtime-set-device th, .runtime-original.runtime-set-device td {
+  padding: 11px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.runtime-original.runtime-set-device th {
+  color: var(--blue);
+  background: #f8fafc;
+}
+.runtime-original.runtime-set-device .recall {
+  margin-top: 28px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+.runtime-original.runtime-set-device .recall summary {
+  font-size: 19px;
+}
+.runtime-original.runtime-set-device .recall p {
+  padding-left: 19px;
+}
+.runtime-original.runtime-set-device footer {
+  margin-top: 28px;
+  color: var(--muted);
+  font-size: 18px;
+}
+.runtime-original.runtime-set-device .spine {
+  font-weight: 700;
+  color: var(--blue);
+}
+@media (max-width: 800px) {
+  .runtime-original.runtime-set-device main {
+    margin: 0;
+    padding: 30px 20px;
+  }
+  .runtime-original.runtime-set-device h1 {
+    font-size: 31px;
+  }
+  .runtime-original.runtime-set-device h2 {
+    font-size: 25px;
+  }
+  .runtime-original.runtime-set-device {
+    font-size: 18px;
+  }
+  .runtime-original.runtime-set-device .diagram {
+    min-width: 0;
+  }
+  .runtime-original.runtime-set-device .document-toc {
+    gap: 9px 20px;
+  }
+  .runtime-original.runtime-set-device th, .runtime-original.runtime-set-device td {
+    padding: 9px 10px;
+  }
+  .runtime-original.runtime-set-device .sources ul {
+    font-size: 17px;
+  }
+}
+@media print {
+  .runtime-original.runtime-set-device {
+    background: #fff;
+  }
+  .runtime-original.runtime-set-device main {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  .runtime-original.runtime-set-device .document-toc {
+    display: none;
+  }
+  .runtime-original.runtime-set-device section {
+    break-inside: avoid;
+    break-before: auto;
+  }
+  .runtime-original.runtime-set-device .diagram-wrap {
+    overflow: visible;
+  }
+  .runtime-original.runtime-set-device .diagram {
+    min-width: 0;
+  }
+  .runtime-original.runtime-set-device .sources {
+    display: none;
+  }
+  .runtime-original.runtime-set-device .recall {
+    display: none;
+  }
+  .runtime-original.runtime-set-device a {
+    color: inherit;
+  }
+  .runtime-original.runtime-set-device figure {
+    break-inside: avoid;
+  }
+  .runtime-original.runtime-set-device h1 {
+    font-size: 28px;
+  }
+  .runtime-original.runtime-set-device h2 {
+    font-size: 23px;
+  }
+  .runtime-original.runtime-set-device {
+    font-size: 16px;
+  }
+}
+.runtime-original.runtime-set-device .binding-table {
+  table-layout: fixed;
+  min-width: 960px;
+}
+.runtime-original.runtime-set-device .binding-table th[scope=row] {
+  background: #f8fafc;
+  color: var(--ink);
+  font-weight: 700;
+}
+.runtime-original.runtime-set-device .binding-table td {
+  overflow-wrap: anywhere;
+}
+.runtime-original.runtime-set-device .binding-table thead th {
+  vertical-align: top;
+}
+.runtime-original.runtime-set-device .binding-table td strong {
+  font-weight: 700;
+}
+@media print {
+  .runtime-original.runtime-set-device .binding-table {
+    min-width: 0;
+    font-size: 15px;
+  }
+}
+.runtime-original.runtime-set-device .core-methods {
+  table-layout: fixed;
+}
+.runtime-original.runtime-set-device .core-methods td {
+  overflow-wrap: anywhere;
+}
+.runtime-original.runtime-set-device .stars-resources {
+  table-layout: fixed;
+  min-width: 760px;
+}
+.runtime-original.runtime-set-device .stars-resources td {
+  overflow-wrap: anywhere;
+}
+.runtime-original.runtime-set-device .stars-resources th:nth-child(1) {
+  width: 20%;
+}
+.runtime-original.runtime-set-device .stars-resources th:nth-child(2) {
+  width: 32%;
+}
+.runtime-original.runtime-set-device .document-toc {
+  align-items: flex-start;
+}
+.runtime-original.runtime-set-device .toc-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.runtime-original.runtime-set-device .toc-subsections {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-left: 18px;
+  font-size: 17px;
+}
+.runtime-original.runtime-set-device .setup-step {
+  padding-top: 24px;
+  margin-top: 0;
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.runtime-original.runtime-set-device .setup-step + .setup-step {
+  border-top: 1px solid var(--line);
+  margin-top: 29px;
+  padding-top: 29px;
+}
+.runtime-original.runtime-set-device h3 span, .runtime-original.runtime-set-device h4 span {
+  margin-right: 12px;
+  color: var(--blue);
+}
+.runtime-original.runtime-set-device h4 {
+  font-size: 21px;
+  margin: 18px 0;
+}
+.runtime-original.runtime-set-device .source-trigger {
+  cursor: pointer;
+}
+.runtime-original.runtime-set-device .source-trigger:focus {
+  outline: none;
+}
+.runtime-original.runtime-set-device .source-trigger:focus .box, .runtime-original.runtime-set-device .source-trigger:hover .box {
+  stroke: var(--blue);
+  stroke-width: 2;
+}
+.runtime-original.runtime-set-device .source-dialog {
+  width: min(1100px, 100vw - 32px);
+  height: min(820px, 100dvh - 32px);
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--paper);
+  color: var(--ink);
+  overflow: hidden;
+  font-family: "Times New Roman", "SimSun", serif;
+}
+.runtime-original.runtime-set-device .source-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+.runtime-original.runtime-set-device .source-dialog::backdrop {
+  background: rgba(36, 53, 69, 0.38);
+}
+.runtime-original.runtime-set-device .source-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--line);
+}
+.runtime-original.runtime-set-device .source-heading {
+  min-width: 0;
+}
+.runtime-original.runtime-set-device .source-heading h2 {
+  font-size: 23px;
+  margin: 0;
+}
+.runtime-original.runtime-set-device .source-location {
+  font-size: 17px;
+  color: var(--muted);
+  margin: 6px 0 0;
+  overflow-wrap: anywhere;
+}
+.runtime-original.runtime-set-device .source-close {
+  flex-shrink: 0;
+  min-height: 42px;
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--blue);
+  font: inherit;
+  font-size: 18px;
+  cursor: pointer;
+}
+.runtime-original.runtime-set-device .source-controls {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 12px 22px;
+  font-size: 18px;
+}
+.runtime-original.runtime-set-device .source-select {
+  min-width: 0;
+  width: 100%;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 17px;
+}
+.runtime-original.runtime-set-device .source-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background: #f8fafc;
+}
+.runtime-original.runtime-set-device .source-code {
+  margin: 0;
+  padding: 14px 0;
+  font: 16px/1.65 Consolas, "Courier New", "SimSun", monospace;
+  tab-size: 4;
+}
+.runtime-original.runtime-set-device .code-line {
+  display: block;
+  min-width: max-content;
+  padding: 1px 16px;
+  border-left: 3px solid transparent;
+  white-space: pre;
+}
+.runtime-original.runtime-set-device .code-line.is-target {
+  background: var(--amber-bg);
+  border-left-color: #b77e2d;
+}
+.runtime-original.runtime-set-device .line-number {
+  display: inline-block;
+  width: 4.2em;
+  margin-right: 18px;
+  color: var(--muted);
+  text-align: right;
+  user-select: none;
+}
+@media (max-width: 600px) {
+  .runtime-original.runtime-set-device .source-dialog {
+    width: calc(100vw - 16px);
+    height: calc(100dvh - 16px);
+  }
+  .runtime-original.runtime-set-device .source-header {
+    padding: 14px 12px;
+    gap: 10px;
+  }
+  .runtime-original.runtime-set-device .source-heading h2 {
+    font-size: 21px;
+  }
+  .runtime-original.runtime-set-device .source-controls {
+    padding: 10px 12px;
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+  .runtime-original.runtime-set-device .code-line {
+    padding-left: 8px;
+    padding-right: 12px;
+  }
+  .runtime-original.runtime-set-device .line-number {
+    width: 3.5em;
+    margin-right: 12px;
+  }
+  .runtime-original.runtime-set-device .source-close {
+    font-size: 17px;
+    padding: 5px 10px;
+  }
+}
+@media print {
+  .runtime-original.runtime-set-device .source-dialog {
+    display: none !important;
+  }
+}
+.runtime-original.runtime-set-device .diagram {
+  min-width: 780px;
+}
+.runtime-original.runtime-set-device .diagram-wrap {
+  max-width: 100%;
+}
+.runtime-original.runtime-set-device .sources a:focus-visible, .runtime-original.runtime-set-device .source-trigger:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 4px;
+}
+.runtime-original.runtime-set-device table th[scope=row] {
+  background: #f8fafc;
+  color: var(--ink);
+  font-weight: 700;
+  width: 23%;
+}
+.runtime-original.runtime-set-device .binding-table {
+  min-width: 900px;
+}
+.runtime-original.runtime-set-device .binding-table th:first-child {
+  width: 31%;
+}
+.runtime-original.runtime-set-device .binding-table td {
+  font-size: 18px;
+}
+.runtime-original.runtime-set-device .source-code {
+  font: 18px/1.65 "Times New Roman", "SimSun", serif;
+}
+.runtime-original.runtime-set-device .document-toc {
+  gap: 9px 23px;
+}
+.runtime-original.runtime-set-device .node-sub {
+  font-size: 20px;
+}
+.runtime-original.runtime-set-device .edge-label {
+  font-size: 19px;
+}
+@media print {
+  .runtime-original.runtime-set-device .diagram {
+    min-width: 0;
+  }
+  .runtime-original.runtime-set-device .binding-table {
+    min-width: 0;
+  }
+  .runtime-original.runtime-set-device section {
+    break-inside: auto;
+  }
+  .runtime-original.runtime-set-device h2, .runtime-original.runtime-set-device h3 {
+    break-after: avoid;
+  }
+  .runtime-original.runtime-set-device .table-wrap {
+    overflow: visible;
+  }
+  .runtime-original.runtime-set-device thead {
+    display: table-header-group;
+  }
+  .runtime-original.runtime-set-device tr {
+    break-inside: avoid;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .runtime-original.runtime-set-device {
+    scroll-behavior: auto;
+  }
+}
+.runtime-original.runtime-set-device .resource-table {
+  table-layout: fixed;
+  min-width: 930px;
+}
+.runtime-original.runtime-set-device .resource-table th:nth-child(1) {
+  width: 22%;
+}
+.runtime-original.runtime-set-device .resource-table th:nth-child(2) {
+  width: 12%;
+}
+.runtime-original.runtime-set-device .resource-table th:nth-child(3) {
+  width: 43%;
+}
+.runtime-original.runtime-set-device .resource-table th:nth-child(4) {
+  width: 23%;
+}
+.runtime-original.runtime-set-device .resource-table th[scope=row] {
+  width: auto;
+}
+.runtime-original.runtime-set-device .resource-table th, .runtime-original.runtime-set-device .resource-table td {
+  overflow-wrap: anywhere;
+}
+.runtime-original.runtime-set-device .resource-table a {
+  font-weight: inherit;
+}
+.runtime-original.runtime-set-device .resource-detail {
+  padding: 12px 0;
+}
+.runtime-original.runtime-set-device .resource-detail summary {
+  font-size: 19px;
+}
+.runtime-original.runtime-set-device .resource-detail li, .runtime-original.runtime-set-device .conclusions li {
+  margin: 12px 0;
+}
+.runtime-original.runtime-set-device .conclusions {
+  padding-left: 25px;
+}
+.runtime-original.runtime-set-device h3 {
+  margin-top: 30px;
+}
+@media print {
+  .runtime-original.runtime-set-device .resource-table {
+    min-width: 0;
+    font-size: 15px;
+  }
+  .runtime-original.runtime-set-device .resource-detail {
+    display: none;
+  }
+  .runtime-original.runtime-set-device tr {
+    break-inside: avoid;
+  }
+}
+.runtime-original.runtime-set-device {display:flow-root;}
+.runtime-original.runtime-set-device .document-toc {top:84px;}
+.runtime-original.runtime-set-device footer {display:block!important;}
+.runtime-original.runtime-set-device :is(.external-icon,.clipboard-button,a[role="anchor"]) {display:none;}

@@ -19,4 +19,6 @@ CANN Runtime 学习与复盘。
 
 - [kernelLaunch 复盘学习图解](kernel-launch-review.md)
 
+- [setDevice 复盘学习图解](set-device-review.md)
+
 [在个人知识库中阅读](https://avengerdsf.github.io/knowledge/runtime/)
