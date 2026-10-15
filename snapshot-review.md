@@ -282,6 +282,10 @@ tags:
 <tr><td><code>Module::soNamesBaseAddr_</code></td><td><strong>该 Module 的 AICPU 算子库加载流程。</strong>指向 Device 上保存 SO 名称的缓冲；名称内容来自 <code>Program::GetSoName()</code>，用于标明需要加载哪个共享库，供后续 AICPU 任务使用。</td><td><code>module-&gt;GetAicpuLoadInfo()</code> 输出的 <code>soNameBase</code></td></tr>
 <tr><td><code>Module::kernelNamesBaseAddr_</code></td><td><strong>该 Module 的 AICPU kernel 加载与入口查找流程。</strong>指向 Device 上的 kernel 名称缓冲，内容来自 <code>Program::GetKernelNamesBuffer()</code>；保存该库提供的 kernel 名称，供加载及后续任务查找入口使用。</td><td><code>GetAicpuLoadInfo()</code> 输出的 <code>kernelNameBase</code></td></tr>
 </tbody></table></div>
+<ol id="module-program-supplement" class="substeps">
+<li><strong>加载关系：</strong>同一 Program 在同一 Device 上复用一个 Module。Program 中的多个 Kernel 共用该 Module，通过各自的入口偏移定位设备代码。</li>
+<li><strong>对象与地址关系：</strong>Program 和 Module 都是 Host 侧管理对象，实际代码存放在 Device 内存中。Program 的设备地址记录与 Module 的代码基地址可以指向同一块代码内存。</li>
+</ol>
 <div id="module-name-purpose">
 <p><strong>算子二进制、SO 与 kernel：</strong>二进制表示编译产物，SO 表示共享库形式，kernel 表示具体的执行实现及入口。一个二进制或 SO 可以提供多个 kernel 入口。</p>
 <div class="table-wrap"><table><colgroup><col style="width:20%"><col style="width:40%"><col style="width:40%"></colgroup>
